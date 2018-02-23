@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Bleeding:</strong>
+  <%= @day.bleeding %>
+</p>
+
+<p>
+  <strong>Sensation:</strong>
+  <%= @day.sensation %>
+</p>
+
+<p>
+  <strong>Characteristics:</strong>
+  <%= @day.characteristics %>
+</p>
+
+<p>
+  <strong>Cervix:</strong>
+  <%= @day.cervix %>
+</p>
+
+<p>
+  <strong>Temp:</strong>
+  <%= @day.temp %>
+</p>
+
+<%= link_to 'Edit', edit_day_path(@day) %> |
+<%= link_to 'Back', days_path %>
