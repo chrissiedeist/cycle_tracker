@@ -5,6 +5,8 @@
 <table>
   <thead>
     <tr>
+      <th>Date</th>
+      <th>Cycle day</th>
       <th>Bleeding</th>
       <th>Sensation</th>
       <th>Characteristics</th>
@@ -17,6 +19,8 @@
   <tbody>
     <% @days.each do |day| %>
       <tr>
+        <td><%= day.date %></td>
+        <td><%= day.number %></td>
         <td><%= day.bleeding %></td>
         <td><%= day.sensation %></td>
         <td><%= day.characteristics %></td>

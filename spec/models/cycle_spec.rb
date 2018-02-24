@@ -212,7 +212,11 @@ RSpec.describe Cycle, type: :model do
     end
   end
 
-  describe "phase_3_start" do
+  describe "initialization" do
+    subject { Cycle.create(start_date: Date.today) }
 
+    it "has 40 blank days" do
+      expect(subject.days.length).to eq(40)
+    end
   end
 end

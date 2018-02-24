@@ -1,6 +1,8 @@
 class Cycle < ActiveRecord::Base
   has_many :days
 
+  after_create :_add_blank_days
+
   def cycle_day(number)
     days.where(number: number).take
   end
@@ -89,5 +91,16 @@ class Cycle < ActiveRecord::Base
 
   def _cervix_hard_and_closed_three_days?
     false
+  end
+
+  def _add_blank_days
+    (0...40).each do |day_num|
+      days.create(
+        {
+          date: start_date + day_num.days,
+          number: day_num,
+        }
+      )
+    end
   end
 end
