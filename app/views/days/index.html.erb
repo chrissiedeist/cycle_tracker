@@ -22,9 +22,9 @@
         <td><%= day.characteristics %></td>
         <td><%= day.cervix %></td>
         <td><%= day.temp %></td>
-        <td><%= link_to 'Show', day %></td>
-        <td><%= link_to 'Edit', edit_day_path(day) %></td>
-        <td><%= link_to 'Destroy', day, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', cycle_day_path(@cycle, day) %></td>
+        <td><%= link_to 'Edit', edit_cycle_day_path(@cycle, day) %></td>
+        <td><%= link_to 'Destroy', [@cycle, day], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -32,4 +32,4 @@
 
 <br>
 
-<%= link_to 'New Day', new_day_path %>
+<%= link_to 'New Day', new_cycle_day_path(@cycle) %>

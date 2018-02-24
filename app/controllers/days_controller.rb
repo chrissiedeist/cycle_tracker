@@ -1,34 +1,37 @@
 class DaysController < ApplicationController
   before_action :set_day, only: [:show, :edit, :update, :destroy]
+  before_action :load_cycle
 
   # GET /days
   # GET /days.json
   def index
-    @days = Day.all
+    @days = @cycle.days.all
   end
 
   # GET /days/1
   # GET /days/1.json
   def show
+    @cycle.days.find(params[:id])
   end
 
   # GET /days/new
   def new
-    @day = Day.new
+    @day = @cycle.days.new
   end
 
   # GET /days/1/edit
   def edit
+    @cycle.days.find(params[:id])
   end
 
   # POST /days
   # POST /days.json
   def create
-    @day = Day.new(day_params)
+    @day = @cycle.days.new(day_params)
 
     respond_to do |format|
       if @day.save
-        format.html { redirect_to @day, notice: 'Day was successfully created.' }
+        format.html { redirect_to [@cycle, @day], notice: 'Day was successfully created.' }
         format.json { render :show, status: :created, location: @day }
       else
         format.html { render :new }
@@ -42,7 +45,7 @@ class DaysController < ApplicationController
   def update
     respond_to do |format|
       if @day.update(day_params)
-        format.html { redirect_to @day, notice: 'Day was successfully updated.' }
+        format.html { redirect_to [@cycle, @day], notice: 'Day was successfully updated.' }
         format.json { render :show, status: :ok, location: @day }
       else
         format.html { render :edit }
@@ -64,11 +67,15 @@ class DaysController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_day
-      @day = Day.find(params[:id])
+      @day = Cycle.find(params[:cycle_id]).days.find(params[:id])
+    end
+
+    def load_cycle
+      @cycle = Cycle.find(params[:cycle_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def day_params
-      params.require(:day).permit(:bleeding, :sensation, :characteristics, :cervix, :temp)
+      params.require(:day).permit(:bleeding, :sensation, :characteristics, :cervix, :temp, :number, :date)
     end
 end
