@@ -17,8 +17,9 @@ FactoryGirl.define do
       date = start_date + number.days
 
       pattern.map do |type, num_days, temps=nil|
-        (1..num_days).map do
-          day = FactoryGirl.create(type, number: number, date: date)
+        (1..num_days).map do |i|
+          temp = temps ? temps[i - 1] : 98.6
+          day = FactoryGirl.create(type, number: number, date: date, temp: temp)
           number +=1
           date += 1.day
           day

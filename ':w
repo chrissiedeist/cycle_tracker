@@ -8,14 +8,10 @@ class Cycle < ActiveRecord::Base
   def phase_3_start
     return "unknown" if htl == "unknown"
 
-    third_day_after_peak = cycle_day(peak_day + 3)
 
+    third_day_after_peak = cycle_day(peak_day + 3)
     if third_day_after_peak.temp >= htl 
       return third_day_after_peak.number
-    elsif _cervix_hard_and_closed_three_days?
-      return third_day_after_peak.number
-    else
-      peak_day + 4
     end
   end
 
@@ -85,9 +81,5 @@ class Cycle < ActiveRecord::Base
 
   def _next_day(day)
     cycle_day(day.number + 1)
-  end
-
-  def _cervix_hard_and_closed_three_days?
-    false
   end
 end
