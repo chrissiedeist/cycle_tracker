@@ -1,4 +1,6 @@
 class Day < ActiveRecord::Base
+  belongs_to :cycle
+
   CHARACTERISTICS_FERTILITY_SCORE = {
     "s" => 3,
     "t" => 2,
@@ -10,6 +12,10 @@ class Day < ActiveRecord::Base
     "d" => 1,
   }
 
+  def bleeding?
+    bleeding.present?
+  end
+
   def more_fertile?
     max_score == 3
   end
@@ -19,13 +25,13 @@ class Day < ActiveRecord::Base
   end
 
   def less_fertile?
-    max_score == 1
+    max_score == 1 || bleeding?
   end
   
   def max_score
    [ 
       CHARACTERISTICS_FERTILITY_SCORE[characteristics],
       SENSATIONS_FERTILITY_SCORE[sensation]
-   ].max
+   ].max || 1
   end
 end
