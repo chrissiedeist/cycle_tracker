@@ -52,8 +52,6 @@ RSpec.describe Cycle, type: :model do
       end
 
       it "sets temperaturesappropriately" do
-        expect(cycle.days.count).to eq(28)
-
         expect(cycle.cycle_day(1).temp).to eq(97.4)
         expect(cycle.cycle_day(5).temp).to eq(97.3)
         expect(cycle.cycle_day(6).temp).to eq(97.5)
