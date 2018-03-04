@@ -3,6 +3,8 @@ class Cycle < ActiveRecord::Base
 
   after_create :_add_blank_days
 
+  attr_accessor :pre_shift_6
+
   def cycle_day(number)
     days.where(number: number).take
   end
@@ -94,6 +96,8 @@ class Cycle < ActiveRecord::Base
   end
 
   def _add_blank_days
+    return if days.length > 0
+
     (0...40).each do |day_num|
       days.create(
         {

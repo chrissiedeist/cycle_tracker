@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180224200035) do
+ActiveRecord::Schema.define(version: 20180225213029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,12 @@ ActiveRecord::Schema.define(version: 20180224200035) do
     t.date     "date",            null: false
     t.integer  "number",          null: false
     t.integer  "cycle_id"
+    t.integer  "weight"
+    t.integer  "cramps"
+    t.integer  "irritability"
+    t.integer  "sensitivity"
+    t.integer  "drinks"
+    t.integer  "hours_sleep"
   end
 
   add_index "days", ["cycle_id"], name: "index_days_on_cycle_id", using: :btree

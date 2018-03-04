@@ -1,3 +1,13 @@
-migration: add date to day
-day factories
-cycle: test peak day
+- [x] migration: add date to day
+- [x] day factories
+- [x] cycle: test peak day
+- [x] add validations to day
+- [ ] add rails constrainst one day per num and date
+- [ ] add weight to day
+- [ ] add shared class for days helper
+- [x] create all blank days on creating cycle
+
+
+Maybe later
+- [ ] add migration to day (edited or not)
+- [ ] add migration to cycle (estimated days)

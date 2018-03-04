@@ -13,23 +13,23 @@
 
   <div class="field">
     <%= f.label :bleeding %><br>
-    <%= f.number_field :bleeding %>
+    <%= f.select(:bleeding, options_for_select([["None", ""], ["Light", "1"], ["Heavy", "2"]])) %>
   </div>
   <div class="field">
     <%= f.label :sensation %><br>
-    <%= f.text_field :sensation %>
+    <%= f.select(:sensation, options_for_select([["Dry", "d"],["Moist", "m"],["Wet", "w"], ["Not observed", nil]])) %>
   </div>
   <div class="field">
     <%= f.label :characteristics %><br>
-    <%= f.text_field :characteristics %>
+    <%= f.select(:cervix, options_for_select([["None", "n"],["Tacky", "t"],["Slippery", "s"], ["Not observed", nil]])) %>
   </div>
   <div class="field">
     <%= f.label :cervix %><br>
-    <%= f.text_field :cervix %>
+    <%= f.select(:cervix, options_for_select([["Hard", "h"],["Soft", "s"], ["Not observed", nil]])) %>
   </div>
   <div class="field">
     <%= f.label :temp %><br>
-    <%= f.number_field :temp %>
+    <%= f.select(:temp, options_for_select([96.0, 96.1])) %>
   </div>
   <div class="actions">
     <%= f.submit %>
