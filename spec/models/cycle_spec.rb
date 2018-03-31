@@ -5,10 +5,6 @@ RSpec.describe Cycle, type: :model do
     FactoryGirl.create(
       :cycle,
       pattern: pattern
-      # bleeding_end: bleeding_end,
-      # low_end: low_end,
-      # high_end: high_end,
-      # medium_end: medium_end,
     )
   end
 
@@ -133,7 +129,7 @@ RSpec.describe Cycle, type: :model do
     end
   end
 
-  describe "ltl and htl" do
+  describe "phase_3_start" do
     context "standard cycle" do
       let(:pattern) do
         [
@@ -145,17 +141,7 @@ RSpec.describe Cycle, type: :model do
         ]
       end
 
-      it "has an ltl of 97.4" do
-        expect(cycle.peak_day).to eq(16)
-        expect(cycle.ltl).to eq(97.4)
-      end
-
-      it "has an htl of 97.8" do
-        expect(cycle.peak_day).to eq(16)
-        expect(cycle.htl).to eq(97.8)
-      end
-
-      it "has a phase_3_start of day of 19" do
+      it "is day 19" do
         expect(cycle.phase_3_start).to eq(19)
       end
     end
@@ -169,16 +155,6 @@ RSpec.describe Cycle, type: :model do
           [:medium_fertile_day, 6, [97.6, 97.7, 97.6, 98.4, 97.4, 97.4]],
           [:less_fertile_day, 6, [97.4, 97.4, 97.4, 97.4, 97.4, 97.4]],
         ]
-      end
-
-      it "has an ltl of 97.4" do
-        expect(cycle.peak_day).to eq(16)
-        expect(cycle.ltl).to eq(97.4)
-      end
-
-      it "has an htl of 97.8" do
-        expect(cycle.peak_day).to eq(16)
-        expect(cycle.htl).to eq(97.8)
       end
 
       it "has a phase_3_start of day of 19" do

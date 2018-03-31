@@ -34,4 +34,8 @@ class Day < ActiveRecord::Base
       SENSATIONS_FERTILITY_SCORE[sensation]
    ].max || 1
   end
+
+  def next_day
+    Day.where(:cycle => self.cycle, :number => self.number + 1).first
+  end
 end

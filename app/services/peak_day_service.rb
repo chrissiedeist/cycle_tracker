@@ -1,33 +1,35 @@
 class PeakDayService
-  def self.call(days)
-    new(days).call
+  def self.find(fertilty_scores)
+    new(fertilty_scores).find
   end
 
-  def initialize(days)
-    self.days = days
+  def initialize(fertilty_scores)
+    self.fertilty_scores = fertilty_scores
   end
 
-  attr_accessor :cycle, :days
+  attr_accessor :fertilty_scores
 
-  def call
+  def find
     candidates = []
-    days.sort_by(&:number).each do |day|
-      candidates << day.number if _is_local_peak?(day)
+    fertilty_scores.each_with_index do |score, index|
+      candidates << index if _is_local_peak?(score, index)
     end
 
+    return nil if candidates.empty?
 
-    return "unknown" if candidates.empty?
-
-    candidates.last
+    peak_index = candidates.last
+    peak_index + 1
   end
 
-  def _is_local_peak?(day)
-    return false unless day.more_fertile?
+  def _is_local_peak?(score, index)
+    return false unless score == 3
 
-    next_day = day.next_day
+    next_score = _next_score(index)
 
-    return false unless next_day.present?
+    return true if next_score.present? && next_score < score
+  end
 
-    next_day.medium_fertile? || next_day.less_fertile?
+  def _next_score(index)
+    fertilty_scores[index + 1]
   end
 end

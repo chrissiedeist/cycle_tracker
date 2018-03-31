@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe TemperatureService do
-  subject { TemperatureService.new(temperatures) }
+  subject { TemperatureService.new(temperatures, peak_day) }
 
   context "more than three days above peak" do
+    let(:peak_day) { 18 }
     let(:temperatures) do 
-      [ 97.9,
+      [ 0, 
+        97.9,
         98,
         98,
         97.5,
@@ -32,12 +34,20 @@ RSpec.describe TemperatureService do
       ]
     end
 
-    describe "ltl" do
-      it "finds the ltl" do
-        expect(subject.ltl).to eq(97.6)
-        expect(subject.htl).to eq(98)
-        expect(subject.last_day_of_pre_shift_6).to eq(20)
-      end
+    it "finds the ltl" do
+      expect(subject.ltl).to eq(97.6)
+    end
+
+    it "finds the htl" do
+      expect(subject.htl).to eq(98)
+    end
+
+    it "finds the last_day_of_pre_shift_6" do
+      expect(subject.last_day_of_pre_shift_6).to eq(20)
+    end
+
+    it "finds the xth_high_after_pre_shift_6" do
+      expect(subject.xth_high_after_pre_shift_6(3)).to eq(97.7)
     end
   end
 end

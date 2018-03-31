@@ -1,42 +1,38 @@
 class Cycle < ActiveRecord::Base
   has_many :days
 
-  after_create :_add_blank_days
-
-  attr_accessor :pre_shift_6
-
-  def cycle_day(number)
-    days.where(number: number).take
-  end
+  attr_accessor :pre_shift_6, :htl, :ltl
 
   def phase_3_start
-    return "unknown" if htl == "unknown"
+    return nil unless peak_day.present?
 
-    third_day_after_peak = cycle_day(peak_day + 3)
+    self.temperature_service = TemperatureService.new(temperatures, peak_day.num)
 
-    if third_day_after_peak.temp >= htl 
-      return third_day_after_peak.number
-    elsif _cervix_hard_and_closed_three_days?
-      return third_day_after_peak.number
+    if _xth_high_day_after_thermal_shift(3).temp >= temperature_service.htl || 
+      _cervix_hard_and_closed_three_days?
+
+      return _xth_high_day_after_thermal_shift(3).number
     else
-      peak_day + 4
+      _xth_high_day_after_thermal_shift(4).number
     end
   end
 
+  def _xth_high_day_after_thermal_shift(x)
+    day_num = temperature_service.xth_high_after_pre_shift_6(x)
+
+    _cycle_day(day_num)
+  end
+
   def peak_day
-    PeakDayService.call(self)
-  end
-
-  def ltl
-    TemperatureService.ltl(temperatures, peak_day)
-  end
-
-  def htl
-    TemperatureService.htl(temperatures, peak_day)
+    PeakDayService.call(self.days.map(&:max_score)
   end
 
   def temperatures
-    temperatures = days.map(&:temp)
+    days.map(&:temp)
+  end
+
+  def _cycle_day(number)
+    days.where(number: number).take
   end
 
   def _cervix_hard_and_closed_three_days?
@@ -44,8 +40,6 @@ class Cycle < ActiveRecord::Base
   end
 
   def _add_blank_days
-    return if days.length > 0
-
     (0...40).each do |day_num|
       days.create(
         {
