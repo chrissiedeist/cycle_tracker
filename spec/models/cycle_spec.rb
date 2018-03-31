@@ -58,77 +58,6 @@ RSpec.describe Cycle, type: :model do
     end
   end
 
-  describe "peak_day" do
-    context "high followed by medium" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5],
-          [:less_fertile_day, 3],
-          [:more_fertile_day, 8],
-          [:medium_fertile_day, 6],
-          [:less_fertile_day, 6],
-        ]
-      end
-      it "is the last day of the high fertility days" do
-        expect(cycle.peak_day).to eq(16)
-      end
-    end
-
-    context "high followed by low" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5],
-          [:less_fertile_day, 3],
-          [:more_fertile_day, 8],
-          [:less_fertile_day, 12],
-        ]
-      end
-
-      it "is the last day of the high fertility days" do
-        expect(cycle.peak_day).to eq(16)
-      end
-    end
-
-    context "anomaly high in the middle" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5],
-          [:less_fertile_day, 3],
-          [:more_fertile_day, 1],
-          [:medium_fertile_day, 3],
-          [:more_fertile_day, 4],
-          [:less_fertile_day, 12],
-        ]
-      end
-
-      it "is the last day of the high fertility days" do
-        expect(cycle.peak_day).to eq(16)
-      end
-    end
-
-    context "no high day" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5],
-          [:less_fertile_day, 3],
-          [:medium_fertile_day, 3],
-        ]
-      end
-
-      it "is unknown" do
-        expect(cycle.peak_day).to eq("unknown")
-      end
-    end
-
-    context "no days" do
-      let(:pattern) { [ ] }
-
-      it "is unknown" do
-        expect(cycle.peak_day).to eq("unknown")
-      end
-    end
-  end
-
   describe "phase_3_start" do
     context "standard cycle" do
       let(:pattern) do
@@ -157,7 +86,7 @@ RSpec.describe Cycle, type: :model do
         ]
       end
 
-      it "has a phase_3_start of day of 19" do
+      it "has a phase_3_start of day of 20" do
         expect(cycle.phase_3_start).to eq(20)
       end
     end
@@ -170,27 +99,9 @@ RSpec.describe Cycle, type: :model do
         ]
       end
 
-      it "ltl is nil" do
-        expect(cycle.peak_day).to eq("unknown")
-        expect(cycle.ltl).to eq("unknown")
-      end
-
-      it "htl is nil" do
-        expect(cycle.peak_day).to eq("unknown")
-        expect(cycle.htl).to eq("unknown")
-      end
-
       it "has a phase_3_start of day of unknown" do
-        expect(cycle.phase_3_start).to eq("unknown")
+        expect(cycle.phase_3_start).to eq(nil)
       end
-    end
-  end
-
-  describe "initialization" do
-    subject { Cycle.create(start_date: Date.today) }
-
-    it "has 40 blank days" do
-      expect(subject.days.length).to eq(40)
     end
   end
 end

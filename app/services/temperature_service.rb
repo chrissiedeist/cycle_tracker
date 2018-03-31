@@ -11,18 +11,6 @@ class TemperatureService
     _last_index_of_pre_shift_6 + 1
   end
 
-  def third_high_after_pre_shift_6
-    return nil unless htl
-
-    temperatures[_last_index_of_pre_shift_6 + 3]
-  end
-
-  def xth_high_after_pre_shift_6(x)
-    return nil unless htl
-
-    temperatures[_last_index_of_pre_shift_6 + x]
-  end
-
   def _last_index_of_pre_shift_6
     temperatures.each_with_index do |temp, index|
       next unless index > peak_day - 3
