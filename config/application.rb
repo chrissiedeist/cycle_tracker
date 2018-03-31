@@ -8,13 +8,14 @@ Bundler.require(*Rails.groups)
 
 module CycleTracker
   class Application < Rails::Application
-        config.generators do |generate|
+    config.generators do |generate|
       generate.test_framework :rspec
       generate.helper false
       generate.javascript_engine false
       generate.stylesheets false
     end
 
+        config.autoload_paths += %W(#{config.root}/app/services)
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

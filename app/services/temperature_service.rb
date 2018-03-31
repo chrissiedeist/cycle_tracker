@@ -1,65 +1,44 @@
 class TemperatureService
 
-  attr_accessor :temperatures, :peak_day
+  attr_accessor :temperatures
 
-  def initialize(temperatures, peak_day)
-    self.temperatures = temperatures.compact
-    self.peak_day = peak_day
+  def initialize(temperatures)
+    self.temperatures = temperatures
   end
 
-  def _temp_on_day(num)
-    temperatures[num - 1]
+  def last_day_of_pre_shift_6
+    _last_index_of_pre_shift_6 + 1
   end
 
-  def self.ltl(temperatures, peak_day)
-    new(temperatures, peak_day).ltl
-  end
+  def _last_index_of_pre_shift_6
+    temperatures.each_with_index do |temp, index|
+      next unless index > 7
 
-  def self.htl(temperatures, peak_day)
-    new(temperatures, peak_day).htl
-  end
+      potential_ltl = _max_of_previous_6(index)
 
-  def ltl
-    return "unknown" if peak_day == "unknown"
-
-    first_high_num =_first_of_3_above_6_previous
-
-    _max_of_previous_6_temps(first_high_num)
-  end
-
-  def htl
-    return "unknown" if ltl == "unknown"
-
-    (ltl + 0.4).round(2)
-  end
-
-  def _first_of_3_above_6_previous
-    first = _first_above_previous_6
-
-    return first if _two_additional_temps_above_first?(first)
-  end
-
-  def _first_above_previous_6
-    _nums_around_peak.each do |num|
-      if _temp_on_day(num) > _max_of_previous_6_temps(num)
-        return num
+      if _three_temps_above?(potential_ltl, index)
+        return index
       end
     end
   end
 
-  def _two_additional_temps_above_first?(first_num)
-    second_highest_temp_after_first_high = temperatures.slice(first_num..-1).sort![-2]
-
-    second_highest_temp_after_first_high >= _temp_on_day(first_num)
+  def ltl
+    _max_of_previous_6(_last_index_of_pre_shift_6)
   end
 
-  def _max_of_previous_6_temps(num)
-    (num - 6 .. num - 1).map do |day|
-      _temp_on_day(day)
-    end.max
+  def htl
+    return nil if ltl.nil?
+
+    (ltl + 0.4).round(2)
   end
 
-  def _nums_around_peak
-    ((peak_day - 3)..(peak_day + 3))
+  def _three_temps_above?(potential_ltl, index)
+    [index, index + 1, index + 2].all? do |i|
+      temperatures[i] > potential_ltl
+    end
+  end
+
+  def _max_of_previous_6(index)
+    temperatures[index - 6..index - 1].max
   end
 end
