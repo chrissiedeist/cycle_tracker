@@ -45,9 +45,5 @@ RSpec.describe TemperatureService do
     it "finds the last_day_of_pre_shift_6" do
       expect(subject.last_day_of_pre_shift_6).to eq(20)
     end
-
-    it "finds the xth_high_after_pre_shift_6" do
-      expect(subject.xth_high_after_pre_shift_6(3)).to eq(97.7)
-    end
   end
 end
