@@ -26,12 +26,6 @@ RSpec.describe Day, type: :model do
 
         include_examples "invalid"
       end
-
-      context "invalid temp" do
-        let(:temp) { "t" }
-
-        include_examples "invalid"
-      end
     end
   end
 

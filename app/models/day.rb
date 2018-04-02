@@ -31,7 +31,6 @@ class Day < ActiveRecord::Base
   validates :sensation, inclusion: { in: [ Sensations::Wet, Sensations::Moist, Sensations::Dry, nil] }
   validates :cervix, inclusion: { in: [ Cervix::Soft, Cervix::Hard, nil ] }
   validates :bleeding, inclusion: { in: [Bleeding::None, Bleeding::Light, Bleeding::Heavy, nil] }
-  validates :temp, numericality: true
   validates :number, uniqueness: { scope: :cycle }
   validates :date, uniqueness: { scope: :cycle }
 
