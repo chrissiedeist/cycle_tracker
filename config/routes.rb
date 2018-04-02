@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   resources :cycles do
     resources :days
   end
-    
+
+  root 'cycles#index'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
