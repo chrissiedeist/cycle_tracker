@@ -5,9 +5,8 @@ RSpec.describe Day, type: :model do
   describe "valid" do
     let(:sensation) { Day::Sensations::Wet }
     let(:characteristics) { Day::Characteristics::Slippery }
-    let(:bleeding) { Day::Bleeding::None }
     let(:temp) { 98.2 }
-    let(:day) { FactoryGirl.build(:day, sensation: sensation, characteristics: characteristics, bleeding: bleeding, temp: temp) }
+    let(:day) { FactoryGirl.build(:day, sensation: sensation, characteristics: characteristics, temp: temp) }
 
     shared_examples "invalid" do
       it "is invalid" do
@@ -24,6 +23,12 @@ RSpec.describe Day, type: :model do
 
       context "invalid characteristics" do
         let(:characteristics) { "x" }
+
+        include_examples "invalid"
+      end
+
+      context "invalid temp" do
+        let(:temp) { "t" }
 
         include_examples "invalid"
       end
@@ -178,8 +183,8 @@ RSpec.describe Day, type: :model do
     context "bleeding" do
       let(:phase_3_start) { nil }
       let(:day) { FactoryGirl.create(:bleeding_day) }
-      it "is phase 1" do
-        expect(day.phase).to eq("1")
+      it "is less-fertile" do
+        expect(day.phase).to eq("less-fertile")
       end
     end
 
@@ -187,17 +192,17 @@ RSpec.describe Day, type: :model do
       let(:phase_3_start) { 20 }
       let(:day) { FactoryGirl.create(:day, :number => 20) }
 
-      it "is phase 3" do
-        expect(day.phase).to eq("3")
+      it "is less-fertile" do
+        expect(day.phase).to eq("less-fertile")
       end
     end
 
-    context "unknown" do
+    context "medium-fertile" do
       let(:phase_3_start) { nil }
-      let(:day) { FactoryGirl.create(:day) }
+      let(:day) { FactoryGirl.create(:day, :number => 8) }
 
-      it "is unknown" do
-        expect(day.phase).to eq("unknown")
+      it "is medium-fertile" do
+        expect(day.phase).to eq("medium-fertile")
       end
     end
   end

@@ -84,12 +84,14 @@ class Day < ActiveRecord::Base
   end
 
   def phase
-    if bleeding?
-      "1"
+    if number < 7
+      "less-fertile"
+    elsif number == cycle.peak_day
+      "peak-day"
     elsif cycle.phase_3_start && number >= cycle.phase_3_start
-      "3"
+      "less-fertile"
     else
-      "unknown"
+      "medium-fertile"
     end
   end
 end

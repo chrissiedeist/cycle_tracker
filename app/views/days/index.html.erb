@@ -5,7 +5,6 @@
 <table>
   <thead>
       <tr><td>PEAK DAY:<%= @cycle.peak_day %></td></td>
-      <tr><td>Phase 3 start:<%= @cycle.phase_3_start %></td></td>
       <tr><td>LTL:<%= @cycle.ltl %></td></td>
       <tr><td>HTL:<%= @cycle.htl %></td></td>
     <tr>
@@ -16,14 +15,12 @@
       <th>Characteristics</th>
       <th>Cervix</th>
       <th>Temp</th>
-      <th>Max Score</th>
       <th colspan="3"></th>
     </tr>
   </thead>
-
   <tbody>
     <% @days.each do |day| %>
-      <tr>
+      <tr class="<%= day.phase %>">
         <td><%= day.date %></td>
         <td><%= day.number %></td>
         <td><%= day.bleeding %></td>
@@ -31,7 +28,6 @@
         <td><%= day.characteristics %></td>
         <td><%= day.cervix %></td>
         <td><%= day.temp %></td>
-        <td><%= day.max_score %></td>
         <td><%= link_to 'Show', cycle_day_path(@cycle, day) %></td>
         <td><%= link_to 'Edit', edit_cycle_day_path(@cycle, day) %></td>
         <td><%= link_to 'Destroy', [@cycle, day], method: :delete, data: { confirm: 'Are you sure?' } %></td>

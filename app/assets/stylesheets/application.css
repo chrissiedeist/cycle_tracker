@@ -13,3 +13,19 @@
  *= require_tree .
  *= require_self
  */
+
+.less-fertile {
+  background-color: #B9EABC;
+}
+
+.more-fertile {
+  background-color: #EABFB9;
+}
+
+.medium-fertile {
+  background-color: #F3D59B;
+}
+
+.peak-day {
+  background-color: #EABFB9;
+}
