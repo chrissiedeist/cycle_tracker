@@ -1,6 +1,5 @@
 class Day < ActiveRecord::Base
   belongs_to :cycle
-
   module Temperatures
     NormalRange = (96..100).step(0.1)
   end
@@ -28,6 +27,15 @@ class Day < ActiveRecord::Base
     Heavy = 2
   end
 
+  validates :characteristics, inclusion: { in: [ Characteristics::Slippery, Characteristics::Tacky, Characteristics::None, nil] }
+  validates :sensation, inclusion: { in: [ Sensations::Wet, Sensations::Moist, Sensations::Dry, nil] }
+  validates :cervix, inclusion: { in: [ Cervix::Soft, Cervix::Hard, nil ] }
+  validates :bleeding, inclusion: { in: [Bleeding::None, Bleeding::Light, Bleeding::Heavy, nil] }
+  validates :temp, numericality: true
+  validates :number, uniqueness: { scope: :cycle }
+  validates :date, uniqueness: { scope: :cycle }
+
+
   CHARACTERISTICS_FERTILITY_SCORE = {
     Day::Characteristics::Slippery => 3,
     Day::Characteristics::Tacky => 2,
@@ -41,7 +49,7 @@ class Day < ActiveRecord::Base
   }
 
   def bleeding?
-    bleeding.present?
+    bleeding.present? && bleeding > 0
   end
 
   def more_fertile?

@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :day do
-    bleeding nil
-    sensation "m"
-    characteristics "n"
-    cervix "so"
+    bleeding Day::Bleeding::None
+    sensation Day::Sensations::Dry
+    characteristics Day::Characteristics::None
+    cervix Day::Cervix::Soft
     temp 98.6
     date Date.today
     number 1
@@ -11,8 +11,8 @@ FactoryGirl.define do
 
   factory :bleeding_day, parent: :day do
     bleeding 1
-    sensation ""
-    characteristics ""
+    sensation nil
+    characteristics nil
   end
 
   factory :more_fertile_day, parent: :day do

@@ -2,6 +2,34 @@ require 'rails_helper'
 
 RSpec.describe Day, type: :model do
 
+  describe "valid" do
+    let(:sensation) { Day::Sensations::Wet }
+    let(:characteristics) { Day::Characteristics::Slippery }
+    let(:bleeding) { Day::Bleeding::None }
+    let(:temp) { 98.2 }
+    let(:day) { FactoryGirl.build(:day, sensation: sensation, characteristics: characteristics, bleeding: bleeding, temp: temp) }
+
+    shared_examples "invalid" do
+      it "is invalid" do
+        expect(day).to_not be_valid
+      end
+    end
+
+    context "invalid characteristics" do
+      context "invalid sensation" do
+        let(:sensation) { "t" }
+
+        include_examples "invalid"
+      end
+
+      context "invalid characteristics" do
+        let(:characteristics) { "x" }
+
+        include_examples "invalid"
+      end
+    end
+  end
+
   describe "fertility_score" do
     let(:day) { FactoryGirl.create(:day, date: Date.parse("28-01-2018"), sensation: sensation, characteristics: characteristics) }
 
@@ -51,67 +79,67 @@ RSpec.describe Day, type: :model do
     end
 
     context "sensation is w" do
-      let(:sensation) { "w" }
+      let(:sensation) { Day::Sensations::Wet }
 
       context "characteristics are stretchy" do
-        let(:characteristics) { "s" }
+        let(:characteristics) { Day::Characteristics::Slippery }
         include_examples "it is a more fertile day"
       end
 
       context "characteristics are tacky" do
-        let(:characteristics) { "t" }
+        let(:characteristics) { Day::Characteristics::Tacky }
         include_examples "it is a more fertile day"
       end
 
       context "characteristics are none" do
-        let(:characteristics) { "n" }
+        let(:characteristics) { Day::Characteristics::None }
         include_examples "it is a more fertile day"
       end
     end
 
     context "sensation is moist" do
-      let(:sensation) { "m" }
+      let(:sensation) { Day::Sensations::Moist }
 
       context "characteristics are stretchy" do
-        let(:characteristics) { "s" }
+        let(:characteristics) { Day::Characteristics::Slippery }
         include_examples "it is a more fertile day"
       end
 
       context "characteristics are tacky" do
-        let(:characteristics) { "t" }
+        let(:characteristics) { Day::Characteristics::Tacky }
         include_examples "it is a medium fertile day"
       end
 
       context "characteristics are none" do
-        let(:characteristics) { "n" }
+        let(:characteristics) { Day::Characteristics::None }
         include_examples "it is a medium fertile day"
       end
     end
 
     context "sensation is dry" do
-      let(:sensation) { "d" }
+      let(:sensation) { Day::Sensations::Dry }
 
       context "characteristics are stretchy" do
-        let(:characteristics) { "s" }
+        let(:characteristics) { Day::Characteristics::Slippery }
         include_examples "it is a more fertile day"
       end
 
       context "characteristics are tacky" do
-        let(:characteristics) { "t" }
+        let(:characteristics) { Day::Characteristics::Tacky }
         include_examples "it is a medium fertile day"
       end
 
       context "characteristics are none" do
-        let(:characteristics) { "n" }
+        let(:characteristics) { Day::Characteristics::None }
         include_examples "it is a less fertile day"
       end
     end
 
-    context "sensation is ''" do
-      let(:sensation) { "" }
+    context "sensation is nil" do
+      let(:sensation) { nil }
 
-      context "characteristics are ''" do
-        let(:characteristics) { "" }
+      context "characteristics are nil" do
+        let(:characteristics) { nil }
         include_examples "it is a less fertile day"
       end
     end
