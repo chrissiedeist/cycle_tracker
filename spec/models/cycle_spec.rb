@@ -1,107 +1,81 @@
 require 'rails_helper'
 
 RSpec.describe Cycle, type: :model do
-  let(:cycle) do
+  subject do
     FactoryGirl.create(
       :cycle,
-      pattern: pattern
+      :days => days,
     )
   end
-
-  describe "factory" do
-    context "without temps" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5],
-          [:less_fertile_day, 3],
-          [:more_fertile_day, 8],
-          [:medium_fertile_day, 6],
-          [:less_fertile_day, 6],
-        ]
-      end
-
-      it "sets days appropriately" do
-        expect(cycle.days.count).to eq(28)
-
-        expect(cycle.cycle_day(1)).to be_bleeding
-        expect(cycle.cycle_day(5)).to be_bleeding
-        expect(cycle.cycle_day(6)).to be_less_fertile
-        expect(cycle.cycle_day(8)).to be_less_fertile
-        expect(cycle.cycle_day(9)).to be_more_fertile
-        expect(cycle.cycle_day(16)).to be_more_fertile
-        expect(cycle.cycle_day(17)).to be_medium_fertile
-        expect(cycle.cycle_day(22)).to be_medium_fertile
-        expect(cycle.cycle_day(23)).to be_less_fertile
-        expect(cycle.cycle_day(28)).to be_less_fertile
-      end
-    end
-
-    context "with temps" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5, [97.4, 97.4, 97.4, 97.4, 97.3]],
-          [:less_fertile_day, 3, [97.5, 97.4, 97.4]],
-          [:more_fertile_day, 8, [97.8, 97.4, 97.4, 97.4, 97.4, 97.4, 97.4, 97.4]],
-          [:medium_fertile_day, 6, [97.6, 97.7, 97.8, 98.4, 97.4, 97.4]],
-          [:less_fertile_day, 6, [97.4, 97.4, 97.4, 97.4, 97.4, 97.4]],
-        ]
-      end
-
-      it "sets temperaturesappropriately" do
-        expect(cycle.cycle_day(1).temp).to eq(97.4)
-        expect(cycle.cycle_day(5).temp).to eq(97.3)
-        expect(cycle.cycle_day(6).temp).to eq(97.5)
-        expect(cycle.cycle_day(9).temp).to eq(97.8)
-        expect(cycle.cycle_day(17).temp).to eq(97.6)
-        expect(cycle.cycle_day(22).temp).to eq(97.4)
-      end
+  let(:days) do
+    number = 0
+    date = Date.today - 41.days
+    day_characteristics.map do |day_data|
+      date += 1
+      number += 1
+      FactoryGirl.create(
+        :day,
+        :bleeding => day_data[:bleeding],
+        :sensation => day_data[:sensation] || "d",
+        :characteristics => day_data[:characteristics] || "n",
+        :cervix => day_data[:cervix],
+        :temp => day_data[:temp] || 97.2,
+        :date => date,
+        :number => number,
+      )
     end
   end
 
-  describe "phase_3_start" do
-    context "standard cycle" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5, [97.4, 97.4, 97.4, 97.4, 97.4]],
-          [:less_fertile_day, 3, [97.4, 97.4, 97.2]],
-          [:more_fertile_day, 8, [97.1, 97.2, 97.4, 97.3, 97.5, 97.5, 97.5, 97.4]],
-          [:medium_fertile_day, 6, [97.6, 97.7, 97.8, 98.4, 97.4, 97.4]],
-          [:less_fertile_day, 6, [97.4, 97.4, 97.4, 97.4, 97.4, 97.4]],
-        ]
-      end
+  shared_examples "phase 3 start date" do |date|
+    it "has a start date of #{date}" do
+      expect(subject.phase_3_start).to eq(date)
+    end
+  end
 
-      it "is day 19" do
-        expect(cycle.phase_3_start).to eq(19)
-      end
+  shared_examples "ltl" do |ltl|
+    it "has an ltl of #{ltl}" do
+      expect(subject.ltl).to eq(ltl)
+    end
+  end
+
+  shared_examples "htl" do |htl|
+    it "has an htl of #{htl}" do
+      expect(subject.htl).to eq(htl)
+    end
+  end
+
+  shared_examples "peak day" do |peak_day|
+    it "has an peak_day of #{peak_day}" do
+      expect(subject.peak_day).to eq(peak_day)
+    end
+  end
+
+  context "chart 2" do
+    let(:day_characteristics) do
+      [
+        { bleeding: 1 },
+        { bleeding: 1 },
+        { bleeding: 1 },
+        { bleeding: 1 },
+        { temp: 97.5, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 97.8, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 97.8, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 97.3, sensation: "w", characteristics: "s", cervix: nil },
+        { temp: 97.3, sensation: "d", characteristics: "s", cervix: nil },
+        { temp: 97.5, sensation: "d", characteristics: "s", cervix: nil },
+        { temp: 97.8, sensation: "d", characteristics: "s", cervix: nil },
+        { temp: 97.7, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 98, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 98.2, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 98, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 98.3, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 98.1, sensation: "d", characteristics: "n", cervix: nil },
+      ]
     end
 
-    context "third day after peak below htl" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5, [97.4, 97.4, 97.4, 97.4, 97.4]],
-          [:less_fertile_day, 3, [97.4, 97.4, 97.2]],
-          [:more_fertile_day, 8, [97.1, 97.2, 97.4, 97.3, 97.5, 97.5, 97.5, 97.4]],
-          [:medium_fertile_day, 6, [97.6, 97.7, 97.6, 98.4, 97.4, 97.4]],
-          [:less_fertile_day, 6, [97.4, 97.4, 97.4, 97.4, 97.4, 97.4]],
-        ]
-      end
-
-      it "has a phase_3_start of day of 20" do
-        expect(cycle.phase_3_start).to eq(20)
-      end
-    end
-
-    context "incomplete cycle" do
-      let(:pattern) do
-        [
-          [:bleeding_day, 5, [97.4, 97.4, 97.4, 97.4, 97.4]],
-          [:less_fertile_day, 3, [97.4, 97.4, 97.2]],
-        ]
-      end
-
-      it "has a phase_3_start of day of unknown" do
-        expect(cycle.phase_3_start).to eq(nil)
-      end
-    end
+    include_examples "phase 3 start date", 16
+    include_examples "ltl", 97.8
+    include_examples "htl", 98.2
+    include_examples "peak day", 11
   end
 end

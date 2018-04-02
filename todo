@@ -11,3 +11,9 @@
 Maybe later
 - [ ] add migration to day (edited or not)
 - [ ] add migration to cycle (estimated days)
+
+Todo
+- [ ] default temp to prev day's temp
+- [ ] ensure a day belongs to a cycle
+- [ ] deploy to heroku
+- [ ] add authentication

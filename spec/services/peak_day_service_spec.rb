@@ -8,7 +8,7 @@ RSpec.describe PeakDayService do
       (1...28).map do |day_num|
         if day_num < 5
           1
-        elsif day_num < 8 
+        elsif day_num < 8
           2
         elsif day_num < 20
           3
