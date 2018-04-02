@@ -34,6 +34,17 @@ class Day < ActiveRecord::Base
     Day::Sensations::Dry => 1,
   }
 
+  def phase
+    phase_3_start = cycle.phase_3_start
+    if phase_3_start && self.number >= phase_3_start
+      "3"
+    elsif bleeding?
+      "1"
+    else
+      "unknown"
+    end
+  end
+
   def bleeding?
     bleeding.present?
   end

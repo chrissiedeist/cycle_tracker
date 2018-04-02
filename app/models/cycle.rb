@@ -42,7 +42,7 @@ class Cycle < ActiveRecord::Base
   end
 
   def populate_days
-    (0...40).each do |day_num|
+    (1...40).each do |day_num|
       days.create(
         {
           date: start_date + day_num.days,

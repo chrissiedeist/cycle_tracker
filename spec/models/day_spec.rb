@@ -142,4 +142,35 @@ RSpec.describe Day, type: :model do
       end
     end
   end
+
+  describe "phase" do
+    let(:cycle) { instance_double("Cycle", :phase_3_start => phase_3_start) }
+    before { allow(day).to receive(:cycle).and_return(cycle) }
+
+    context "bleeding" do
+      let(:phase_3_start) { nil }
+      let(:day) { FactoryGirl.create(:bleeding_day) }
+      it "is phase 1" do
+        expect(day.phase).to eq("1")
+      end
+    end
+
+    context "phase 3" do
+      let(:phase_3_start) { 20 }
+      let(:day) { FactoryGirl.create(:day, :number => 20) }
+
+      it "is phase 3" do
+        expect(day.phase).to eq("3")
+      end
+    end
+
+    context "unknown" do
+      let(:phase_3_start) { nil }
+      let(:day) { FactoryGirl.create(:day) }
+
+      it "is unknown" do
+        expect(day.phase).to eq("unknown")
+      end
+    end
+  end
 end
