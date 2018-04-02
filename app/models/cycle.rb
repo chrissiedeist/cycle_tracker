@@ -1,5 +1,5 @@
 class Cycle < ActiveRecord::Base
-  has_many :days
+  has_many :days, -> { order(number: :asc) }
 
   def phase_3_start
     peak_day = PeakDayService.find(_fertility_scores)
