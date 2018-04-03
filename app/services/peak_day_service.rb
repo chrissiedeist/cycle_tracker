@@ -1,17 +1,17 @@
 class PeakDayService
-  def self.find(fertilty_scores)
-    new(fertilty_scores).find
+  def self.find(fertility_scores)
+    new(fertility_scores).find
   end
 
-  def initialize(fertilty_scores)
-    self.fertilty_scores = fertilty_scores
+  def initialize(fertility_scores)
+    self.fertility_scores = fertility_scores
   end
 
-  attr_accessor :fertilty_scores
+  attr_accessor :fertility_scores
 
   def find
     candidates = []
-    fertilty_scores.each_with_index do |score, index|
+    fertility_scores.each_with_index do |score, index|
       candidates << index if _is_local_peak?(score, index)
     end
 
@@ -30,6 +30,6 @@ class PeakDayService
   end
 
   def _next_score(index)
-    fertilty_scores[index + 1]
+    fertility_scores[index + 1]
   end
 end
