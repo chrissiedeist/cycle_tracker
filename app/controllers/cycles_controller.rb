@@ -29,7 +29,7 @@ class CyclesController < ApplicationController
     respond_to do |format|
       if @cycle.save
         @cycle.populate_days
-        format.html { redirect_to @cycle, notice: 'Cycle was successfully created.' }
+        format.html { redirect_to cycle_days_path(@cycle), notice: 'Cycle was successfully created.' }
         format.json { render :show, status: :created, location: @cycle }
       else
         format.html { render :new }

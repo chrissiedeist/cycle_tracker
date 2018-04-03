@@ -13,6 +13,7 @@ Maybe later
 - [ ] add migration to cycle (estimated days)
 
 Todo
+- figure out how to add new day without breaking things
 - [ ] default temp to prev day's temp
 - [ ] ensure a day belongs to a cycle
 - [ ] deploy to heroku
