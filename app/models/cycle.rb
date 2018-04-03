@@ -9,7 +9,7 @@ class Cycle < ActiveRecord::Base
     third_day_after_shift = last_day_of_pre_shift_6 + 3
 
     if _third_temp_greater_than_htl(third_day_after_shift, htl) ||
-      _cervix_hard_and_closed_three_days?
+      _cervix_hard_and_closed_three_days?(third_day_after_shift)
 
       third_day_after_shift
     else
@@ -57,8 +57,11 @@ class Cycle < ActiveRecord::Base
     days.select(&:has_data?).map(&:max_score)
   end
 
-  def _cervix_hard_and_closed_three_days?
-    false
+  def _cervix_hard_and_closed_three_days?(third_day_after_shift)
+    [0, 1, 2].all? do |days_ago|
+      day = cycle_day(third_day_after_shift - days_ago)
+      day.cervix == Day::Cervix::Hard
+    end
   end
 
   def cycle_day(num)
