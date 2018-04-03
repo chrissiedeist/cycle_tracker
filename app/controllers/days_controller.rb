@@ -45,7 +45,7 @@ class DaysController < ApplicationController
   def update
     respond_to do |format|
       if @day.update(day_params)
-        format.html { redirect_to [@cycle, @day], notice: 'Day was successfully updated.' }
+        format.html { redirect_to cycle_days_path(@cycle), notice: 'Day was successfully updated.' }
         format.json { render :show, status: :ok, location: @day }
       else
         format.html { render :edit }
