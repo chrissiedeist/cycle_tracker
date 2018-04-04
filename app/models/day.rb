@@ -8,17 +8,20 @@ class Day < ActiveRecord::Base
     Slippery = "s"
     Tacky = "t"
     None = "n"
+    NotObserved = "no"
   end
 
   module Sensations
     Wet = "w"
     Moist = "m"
     Dry = "d"
+    NotObserved = "no"
   end
 
   module Cervix
     Soft = "s"
     Hard = "h"
+    NotObserved = "no"
   end
 
   module Bleeding

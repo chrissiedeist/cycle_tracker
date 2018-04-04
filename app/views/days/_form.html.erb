@@ -22,19 +22,19 @@
 
   <div class="field">
     <%= f.label :bleeding %><br>
-    <%= f.select(:bleeding, options_for_select([["None", ""], ["Light", "1"], ["Heavy", "2"]], @day.bleeding)) %>
+    <%= f.select(:bleeding, options_for_select([["None", Day::Bleeding::None], ["Light", Day::Bleeding::Light], ["Heavy", Day::Bleeding::Heavy], @day.bleeding || Day::Bleeding::None])) %>
   </div>
   <div class="field">
     <%= f.label :sensation %><br>
-    <%= f.select(:sensation, options_for_select([["Dry", Day::Sensations::Dry],["Moist", Day::Sensations::Moist],["Wet", Day::Sensations::Wet], ["Not observed", nil]], @day.sensation)) %>
+    <%= f.select(:sensation, options_for_select([["Dry", Day::Sensations::Dry],["Moist", Day::Sensations::Moist],["Wet", Day::Sensations::Wet]], @day.sensation)) %>
   </div>
   <div class="field">
     <%= f.label :characteristics %><br>
-    <%= f.select(:characteristics, options_for_select([["None", Day::Characteristics::None],["Tacky", Day::Characteristics::Tacky],["Slippery", Day::Characteristics::Slippery], ["Not observed", nil]], @day.characteristics)) %>
+    <%= f.select(:characteristics, options_for_select([["None", Day::Characteristics::None],["Tacky", Day::Characteristics::Tacky],["Slippery", Day::Characteristics::Slippery]], @day.characteristics)) %>
   </div>
   <div class="field">
     <%= f.label :cervix %><br>
-    <%= f.select(:cervix, options_for_select([["Hard", Day::Cervix::Hard],["Soft", Day::Cervix::Soft], ["Not observed", nil]], @day.cervix)) %>
+    <%= f.select(:cervix, options_for_select([["Soft", Day::Cervix::Soft], ["Hard", Day::Cervix::Hard], ["Not observed", Day::Cervix::NotObserved]], @day.cervix)) %>
   </div>
   <div class="field">
     <%= f.label :temp %><br>
