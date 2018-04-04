@@ -1,10 +1,11 @@
 class CyclesController < ApplicationController
   before_action :set_cycle, only: [:show, :edit, :update, :destroy]
+  before_filter :require_authorization, only: [:show, :edit, :update, :destroy]
 
   # GET /cycles
   # GET /cycles.json
   def index
-    @cycles = Cycle.all
+    @cycles = current_user.cycles
   end
 
   # GET /cycles/1
@@ -25,6 +26,7 @@ class CyclesController < ApplicationController
   # POST /cycles.json
   def create
     @cycle = Cycle.new(cycle_params)
+    @cycle.user_id = current_user.id
 
     respond_to do |format|
       if @cycle.save
@@ -71,5 +73,9 @@ class CyclesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def cycle_params
       params.require(:cycle).permit(:start_date)
+    end
+
+    def require_authorization
+      redirect_to cycles_url unless @cycle.user == current_user
     end
 end

@@ -72,6 +72,7 @@ class DaysController < ApplicationController
 
     def load_cycle
       @cycle = Cycle.find(params[:cycle_id])
+      redirect_to cycles_url unless @cycle.user == current_user
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,5 +1,6 @@
 class Cycle < ActiveRecord::Base
   has_many :days, -> { order(number: :asc) }
+  belongs_to :user
 
   def phase_3_start
     return nil unless _three_days_past_peak?
