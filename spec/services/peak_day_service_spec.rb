@@ -1,19 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe PeakDayService do
-  subject { PeakDayService.find(scores) }
-
+  subject { PeakDayService.find(days) }
   context "one local peak" do
-    let(:scores) do
+  let(:days) do
+    cycle = FactoryGirl.create(:cycle)
+    day_num = 0
+    day_types.map do |day_type|
+      day_num += 1
+      FactoryGirl.create(day_type, number: day_num, cycle: cycle)
+    end
+  end
+    let(:day_types) do
       (1...28).map do |day_num|
         if day_num < 5
-          1
+          :bleeding_day
         elsif day_num < 8
-          2
+          :medium_fertile_day
         elsif day_num < 20
-          3
+          :more_fertile_day
         else
-          1
+          :less_fertile_day
         end
       end
     end
@@ -24,20 +31,29 @@ RSpec.describe PeakDayService do
   end
 
   context "one local peak" do
-    let(:scores) do
+  let(:days) do
+    cycle = FactoryGirl.create(:cycle)
+    day_num = 0
+    day_types.map do |day_type|
+      binding.pry
+      day_num += 1
+      FactoryGirl.create(day_type, number: day_num, cycle: cycle)
+    end
+  end
+    let(:day_types) do
       (1...28).map do |day_num|
         if day_num < 5
-          1
+          :bleeding_day
         elsif day_num < 6
-          2
+          :medium_fertile_day
         elsif day_num < 8
-          3
+          :more_fertile_day
         elsif day_num == 9
-          2
+          :medium_fertile_day
         elsif day_num < 11
-          3
+          :more_fertile_day
         else
-          1
+          :less_fertile_day
         end
       end
     end

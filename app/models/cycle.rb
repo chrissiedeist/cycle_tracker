@@ -19,7 +19,10 @@ class Cycle < ActiveRecord::Base
   end
 
   def peak_day
-    PeakDayService.find(_fertility_scores)
+    PeakDayService.find(_populated_days)
+  end
+
+  def xth_day_of_pre_shift_6(x)
   end
 
   def last_day_of_pre_shift_6
@@ -52,10 +55,6 @@ class Cycle < ActiveRecord::Base
     day = days.where(number: day_num).take
     temp = day.try(:temp)
     temp && temp > htl
-  end
-
-  def _fertility_scores
-    days.select(&:has_data?).map(&:max_score)
   end
 
   def _cervix_hard_and_closed_three_days?(third_day_after_shift)
