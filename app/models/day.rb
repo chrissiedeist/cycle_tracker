@@ -70,7 +70,7 @@ class Day < ActiveRecord::Base
    [
       CHARACTERISTICS_FERTILITY_SCORE[characteristics],
       SENSATIONS_FERTILITY_SCORE[sensation]
-   ].max || 1
+   ].max
   end
 
   def has_data?

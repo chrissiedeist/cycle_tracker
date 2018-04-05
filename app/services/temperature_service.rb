@@ -15,9 +15,11 @@ class TemperatureService
       next unless day.number > peak_day_number - 3
 
       potential_ltl = _max_of_previous_6_temps(day.number)
+      next unless potential_ltl.present?
 
       if _three_temps_above?(potential_ltl, day)
-        last_day = day.number
+        last_day = day.number - 1
+        break
       end
     end
 
@@ -31,14 +33,14 @@ class TemperatureService
   def _max_of_previous_6_temps(number)
     previous_6_days = _day_range(number - 6, number - 1)
     previous_6_temps = previous_6_days.map(&:temp)
-    previous_6_temps.max
+    previous_6_temps.compact.max
   end
 
   def _three_temps_above?(potential_ltl, day)
-    return false unless day_at(day.number + 3).present?
+    return false unless day_at(day.number + 2).present?
 
-    _day_range(day.number + 1, day.number + 3).all? do |day|
-      day.temp > potential_ltl
+    _day_range(day.number, day.number + 2).all? do |day|
+      day.temp.present? && day.temp > potential_ltl
     end
   end
 
@@ -53,7 +55,7 @@ class TemperatureService
   def ltl
     return nil unless last_day_of_pre_shift_6
 
-    _max_of_previous_6_temps(last_day_of_pre_shift_6)
+    _max_of_previous_6_temps(last_day_of_pre_shift_6 + 1)
   end
 
   def htl

@@ -16,12 +16,11 @@ RSpec.describe Cycle, type: :model do
       FactoryGirl.create(
         :day,
         :bleeding => day_data[:bleeding],
-        :sensation => day_data[:sensation] || "d",
-        :characteristics => day_data[:characteristics] || "n",
         :cervix => day_data[:cervix],
         :temp => day_data[:temp] || 97.2,
         :date => date,
         :number => number,
+        :score => day_data[:score],
       )
     end
   end
@@ -63,19 +62,19 @@ RSpec.describe Cycle, type: :model do
         { bleeding: 1 },
         { bleeding: 1 },
         { bleeding: 1 },
-        { temp: 97.5, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 97.8, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 97.8, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 97.3, sensation: "w", characteristics: "s", cervix: nil },
-        { temp: 97.3, sensation: "d", characteristics: "s", cervix: nil },
-        { temp: 97.5, sensation: "d", characteristics: "s", cervix: nil },
-        { temp: 97.8, sensation: "d", characteristics: "s", cervix: nil },
-        { temp: 97.7, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 98, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 98.2, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 98, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 98.3, sensation: "d", characteristics: "n", cervix: nil },
-        { temp: 98.1, sensation: "d", characteristics: "n", cervix: nil },
+        { temp: 97.5, score: 1 },
+        { temp: 97.8, score: 1 },
+        { temp: 97.8, score: 1 },
+        { temp: 97.3, score: 3 },
+        { temp: 97.3, score: 3 },
+        { temp: 97.5, score: 3 },
+        { temp: 97.8, score: 3 },
+        { temp: 97.7, score: 1 },
+        { temp: 98, score: 1 },
+        { temp: 98.2, score: 1 },
+        { temp: 98, score: 1 },
+        { temp: 98.3, score: 1 },
+        { temp: 98.1, score: 1 },
       ]
     end
 
@@ -95,29 +94,29 @@ RSpec.describe Cycle, type: :model do
         { number: 2, bleeding: 1 },
         { number: 3, bleeding: 1 },
         { number: 4, bleeding: 1 },
-        { number: 5, temp: 97.5, sensation: "d", characteristics: "n", cervix: nil },
-        { number: 6, temp: 97.8, sensation: "d", characteristics: "n", cervix: nil },
-        { number: 7, temp: 97.8, sensation: "d", characteristics: "n", cervix: nil },
-        { number: 8, temp: 97.3, sensation: "w", characteristics: "s", cervix: nil },
-        { number: 9, temp: 97.3, sensation: "d", characteristics: "s", cervix: nil },
-        { number: 10, temp: 97.5, sensation: "d", characteristics: "s", cervix: nil },
-        { number: 11, temp: 97.8, sensation: "d", characteristics: "s", cervix: nil },
-        { number: 12, temp: 97.7, sensation: "d", characteristics: "n", cervix: nil },
-        { number: 13, temp: 98, sensation: "d", characteristics: "n", cervix: nil },
-        { number: 14, temp: 98.2, sensation: "d", characteristics: "n", cervix: three_days_prior_cervix },
-        { number: 15, temp: 98, sensation: "d", characteristics: "n", cervix: two_days_prior_cervix },
-        { number: 16, temp: 98, sensation: "d", characteristics: "n", cervix: one_day_prior_cervix },
-        { number: 17, temp: 98.1, sensation: "d", characteristics: "n", cervix: nil },
+        { number: 5, temp: 97.5, score: 1 },
+        { number: 6, temp: 97.8, score: 1 },
+        { number: 7, temp: 97.8, score: 1 },
+        { number: 8, temp: 97.3, score: 3 },
+        { number: 9, temp: 97.3, score: 3 },
+        { number: 10, temp: 97.5, score: 3 },
+        { number: 11, temp: 97.8, score: 3 }, # peak
+        { number: 12, temp: 97.7, score: 1 },
+        { number: 13, temp: 98, score: 1, cervix: three_days_prior_cervix },
+        { number: 14, temp: 98.2, score: 1, cervix: two_days_prior_cervix },
+        { number: 15, temp: 98, score: 1, cervix: one_day_prior_cervix },
+        { number: 16, temp: 98, score: 1 },
+        { number: 17, temp: 98.1, score: 1 },
       ]
     end
 
-    include_examples "last of pre shift 6", 13
+    include_examples "last of pre shift 6", 12
     include_examples "ltl", 97.8
     include_examples "htl", 98.2
     include_examples "peak day", 11
 
     context "no cervix data" do
-      include_examples "phase 3 start date", 17
+      include_examples "phase 3 start date", 16
     end
 
     context "cervix hard last 3 days" do
@@ -125,7 +124,7 @@ RSpec.describe Cycle, type: :model do
       let(:two_days_prior_cervix) { Day::Cervix::Hard }
       let(:one_day_prior_cervix) { Day::Cervix::Hard }
 
-      include_examples "phase 3 start date", 16
+      include_examples "phase 3 start date", 15
     end
 
     context "cervix soft in last 3 days" do
@@ -133,7 +132,7 @@ RSpec.describe Cycle, type: :model do
       let(:three_days_prior_cervix) { Day::Cervix::Soft }
       let(:one_day_prior_cervix) { Day::Cervix::Hard }
 
-      include_examples "phase 3 start date", 17
+      include_examples "phase 3 start date", 16
     end
   end
 end

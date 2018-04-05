@@ -3,6 +3,10 @@ class Cycle < ActiveRecord::Base
   belongs_to :user
 
   def phase_3_start
+    @phase_3_start ||= _phase_3_start
+  end
+
+  def _phase_3_start
     return nil unless _three_days_past_peak?
 
     return nil unless last_day_of_pre_shift_6
@@ -18,11 +22,16 @@ class Cycle < ActiveRecord::Base
     end
   end
 
-  def peak_day
-    PeakDayService.find(_populated_days)
+  def _third_post_peak_day_after_shift
+    if last_day_of_pre_shift_6 > peak_day
+      last_day_of_pre_shift_6 + 3
+    else
+      peak_day + 3
+    end
   end
 
-  def xth_day_of_pre_shift_6(x)
+  def peak_day
+    PeakDayService.find(days)
   end
 
   def last_day_of_pre_shift_6
@@ -38,7 +47,7 @@ class Cycle < ActiveRecord::Base
   end
 
   def temperature_service
-    TemperatureService.new(_populated_days, peak_day)
+    TemperatureService.new(days, peak_day)
   end
 
   def _three_days_past_peak?

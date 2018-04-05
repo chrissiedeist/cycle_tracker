@@ -11,22 +11,6 @@ FactoryGirl.define do
         ]
       end
     end
-
-    days do
-      number = 1
-      date = start_date + number.days
-
-      pattern.map do |type, num_days, temps=nil|
-        (1..num_days).map do |i|
-          temp = temps ? temps[i - 1] : 98.6
-          day = FactoryGirl.create(type, number: number, date: date, temp: temp)
-          number +=1
-          date += 1.day
-          day
-        end
-      end.flatten
-    end
-
     start_date Date.today - 30.days
   end
 end

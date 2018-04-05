@@ -134,15 +134,6 @@ RSpec.describe Day, type: :model do
       end
     end
 
-    context "sensation is nil" do
-      let(:sensation) { nil }
-
-      context "characteristics are nil" do
-        let(:characteristics) { nil }
-        include_examples "it is a less fertile day"
-      end
-    end
-
     describe "factories" do
       context "more_fertile_day" do
         let(:day) { FactoryGirl.create(:more_fertile_day) }
@@ -164,8 +155,6 @@ RSpec.describe Day, type: :model do
         it "is bleeding" do
           expect(day).to be_bleeding
         end
-
-        include_examples "it is a less fertile day"
       end
     end
   end
