@@ -1,59 +1,89 @@
 class TemperatureService
-  def initialize(days, peak_day_number)
-    self.days = days
+  attr_accessor :peak_day_number, :days
+
+  def initialize(peak_day_number, days)
     self.peak_day_number = peak_day_number
+    self.days = days
   end
 
-  attr_accessor :shift_start_day_num, :last_of_pre_shift_6_num, :ltl, :htl
-
-  def compute
-    self.shift_start_day_num = _shift_start_day_num
-    self.last_of_pre_shift_6_num = _last_of_pre_shift_6_num
-    self.ltl = _ltl
-    self.htl = _htl
-
-    self
+  def ltl
+    @ltl ||= _ltl
   end
 
-  private
-  attr_accessor :days, :peak_day_number
 
-  def _shift_start_day_num
-    return unless peak_day_number.present?
-
-    ((peak_day_number - 3)..(peak_day_number + 3)).each do |potential_shift_start|
-      return nil if days.count < potential_shift_start + 3
-
-      six_prev_temps = _day_range(potential_shift_start - 6, potential_shift_start - 1).map(&:temp).compact
-      three_next_temps = _day_range(potential_shift_start, potential_shift_start + 3).map(&:temp).compact
-
-      return nil if six_prev_temps.empty? || three_next_temps.empty?
-
-      return potential_shift_start if three_next_temps.min > six_prev_temps.max
-    end
-  end
-
-  def _last_of_pre_shift_6_num
-    return nil if shift_start_day_num.nil?
-
-    shift_start_day_num - 1
-  end
-
-  def _ltl
-    return nil if last_of_pre_shift_6_num.nil?
-
-    pre_shift_6 = _day_range(last_of_pre_shift_6_num - 6, last_of_pre_shift_6_num)
-
-    pre_shift_6.map(&:temp).max
-  end
-
-  def _htl
-    return nil unless ltl
+  def htl
+    return nil unless ltl.present?
 
     (ltl + 0.4).round(2)
   end
 
+  def thermal_shift_start_day_number
+    thermal_shift_start_day.presence && thermal_shift_start_day.number
+  end
+
+  private
+
+  def thermal_shift_start_day
+    return nil unless peak_day_number.present?
+
+    @thermal_shift_start_day ||= _thermal_shift_start_day
+  end
+
+  def _ltl
+    return nil unless thermal_shift_start_day.present?
+
+    _max_of_previous_6_temps(_thermal_shift_start_day)
+  end
+
+  def _thermal_shift_start_day
+    _potential_shift_start_days.each do |potential_shift_start|
+
+      return potential_shift_start if _is_shift_start?(potential_shift_start)
+    end
+
+    return nil
+  end
+
+  def _potential_shift_start_days
+    _day_range(peak_day_number - 3, peak_day_number + 3)
+  end
+
+  def _is_shift_start?(day)
+    max_of_previous_six_temps = _max_of_previous_6_temps(day)
+    min_of_three_high_temps = _min_of_three_high_temps(day)
+
+    return nil unless max_of_previous_six_temps.present?
+    return nil unless min_of_three_high_temps.present?
+
+    return day if max_of_previous_six_temps < min_of_three_high_temps
+  end
+
+  def _max_of_previous_6_temps(day)
+    previous_6_temps = _day_range(day.number - 6, day.number - 1).map(&:temp).compact
+
+    return nil unless previous_6_temps.count == 6
+
+    previous_6_temps.max
+  end
+
+  def _min_of_three_high_temps(day)
+    three_temps = _day_range(day.number, day.number + 2).map(&:temp).compact
+
+    return nil unless three_temps.count == 3
+
+    three_temps.min
+  end
+  #
+  # def _last_of_pre_shift_6_num
+  #   return nil if shift_start_day_num.nil?
+  #
+  #   shift_start_day_num - 1
+  # end
+  #
   def _day_range(start_num, end_num)
-    days[start_num - 1..end_num - 1]
+    days.select do |day|
+      day.number >= start_num &&
+        day.number <= end_num
+    end
   end
 end

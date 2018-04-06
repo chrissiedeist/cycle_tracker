@@ -6,7 +6,7 @@ class DaysController < ApplicationController
   # GET /days.json
   def index
     @days = @cycle.days.all
-    @cycle_presenter = CyclePresenterService.call(@cycle)
+    @cycle_presenter = CyclePresenterService.build(@cycle)
   end
 
   # GET /days/1

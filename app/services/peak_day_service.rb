@@ -5,7 +5,7 @@ class PeakDayService
 
   attr_accessor :days
 
-  def peak_day
+  def peak_day_number
     candidates = []
     days.each do |day|
       candidates << day if _is_local_peak?(day)

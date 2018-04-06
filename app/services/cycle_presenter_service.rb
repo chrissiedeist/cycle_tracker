@@ -1,28 +1,57 @@
 class CyclePresenterService
 
-  def self.call(cycle)
-    new(cycle).call
+  def self.build(cycle)
+    new(cycle).build
   end
 
-  attr_accessor :peak_day, :last_of_pre_shift_6_num, :ltl, :htl, :phase_3_start
+  attr_accessor :cycle
 
-  def call
-    self.peak_day = PeakDayService.new(days).peak_day
+  def build
+    days = cycle.populated_days
 
-    temperature_service = TemperatureService.new(days, peak_day).compute
-
-    self.last_of_pre_shift_6_num = temperature_service.last_of_pre_shift_6_num
-    self.ltl = temperature_service.ltl
-    self.htl = temperature_service.htl
-    self.phase_3_start = _phase_3_start
+    self.peak_day_service = PeakDayService.new(days)
+    self.temperature_service = TemperatureService.new(peak_day_number, days)
 
     self
   end
 
+  def peak_day_number
+    peak_day_service.peak_day_number
+  end
+
+  def thermal_shift_start_day_number
+    temperature_service.thermal_shift_start_day_number
+  end
+
+  def ltl
+    temperature_service.ltl
+  end
+
+  def htl
+    temperature_service.htl
+  end
+
+  def phase_3_start
+    return nil unless thermal_shift_start_day_number.present?
+
+    number_of_third_day_after_shift = _third_post_peak_day_number_after_shift
+
+    return nil unless number_of_third_day_after_shift.present?
+
+    if _third_temp_greater_than_htl(number_of_third_day_after_shift, htl) ||
+        _cervix_hard_and_closed_three_days?(number_of_third_day_after_shift)
+
+      number_of_third_day_after_shift
+    else
+      number_of_third_day_after_shift + 1
+    end
+  end
+
+
   def phase_at(day_number)
     if day_number < 7
       "less-fertile"
-    elsif day_number == peak_day
+    elsif day_number == peak_day_number
       "peak-day"
     elsif phase_3_start && number >= phase_3_start
       "less-fertile"
@@ -33,39 +62,16 @@ class CyclePresenterService
 
   def initialize(cycle)
     self.cycle = cycle
-    self.days = cycle.populated_days
   end
 
   private
-  attr_accessor :peak_day_service, :temperature_service, :cycle, :days
+  attr_accessor :peak_day_service, :temperature_service
 
-  def _phase_3_start
-    return nil unless _three_days_past_peak?
-
-    return nil unless last_of_pre_shift_6_num
-
-    third_day_after_shift = _third_post_peak_day_after_shift
-
-    if _third_temp_greater_than_htl(third_day_after_shift, htl) ||
-      _cervix_hard_and_closed_three_days?(third_day_after_shift)
-
-      third_day_after_shift
+  def _third_post_peak_day_number_after_shift
+    if thermal_shift_start_day_number > peak_day_number
+      thermal_shift_start_day_number + 2
     else
-      third_day_after_shift + 1
-    end
-  end
-
-  def _three_days_past_peak?
-    return nil unless peak_day.present?
-
-    cycle.populated_days.count >= peak_day + 3
-  end
-
-  def _third_post_peak_day_after_shift
-    if last_of_pre_shift_6_num > peak_day
-      last_of_pre_shift_6_num + 3
-    else
-      peak_day + 3
+      peak_day_number + 3
     end
   end
 

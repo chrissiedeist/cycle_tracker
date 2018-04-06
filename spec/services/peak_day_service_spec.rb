@@ -20,7 +20,7 @@ RSpec.describe PeakDayService do
     end
 
     it "finds the peak day" do
-      expect(subject.peak_day).to eq(nil)
+      expect(subject.peak_day_number).to eq(nil)
     end
   end
 
@@ -41,7 +41,7 @@ RSpec.describe PeakDayService do
     end
 
     it "finds the peak day" do
-      expect(subject.peak_day).to eq(9)
+      expect(subject.peak_day_number).to eq(9)
     end
   end
 
@@ -66,7 +66,7 @@ RSpec.describe PeakDayService do
     end
 
     it "finds the peak day" do
-      expect(subject.peak_day).to eq(13)
+      expect(subject.peak_day_number).to eq(13)
     end
 
     it "finds the third day after the peak" do

@@ -6,7 +6,7 @@ RSpec.describe CyclePresenterService, type: :model do
       :cycle,
       :days => days,
     )
-    CyclePresenterService.new(cycle).call
+    CyclePresenterService.build(cycle)
   end
 
   let(:days) do
@@ -27,9 +27,9 @@ RSpec.describe CyclePresenterService, type: :model do
     end
   end
 
-  shared_examples "last of pre shift 6" do |day|
-    it "has a last pre shift day of #{day}" do
-      expect(subject.last_of_pre_shift_6_num).to eq(day)
+  shared_examples "thermal_shift_start" do |day|
+    it "has a thermal_shift_start_day_number of #{day}" do
+      expect(subject.thermal_shift_start_day_number).to eq(day)
     end
   end
 
@@ -53,7 +53,7 @@ RSpec.describe CyclePresenterService, type: :model do
 
   shared_examples "peak day" do |peak_day|
     it "has an peak_day of #{peak_day}" do
-      expect(subject.peak_day).to eq(peak_day)
+      expect(subject.peak_day_number).to eq(peak_day)
     end
   end
 
@@ -112,7 +112,7 @@ RSpec.describe CyclePresenterService, type: :model do
       ]
     end
 
-    include_examples "last of pre shift 6", 12
+    include_examples "thermal_shift_start", 13
     include_examples "ltl", 97.8
     include_examples "htl", 98.2
     include_examples "peak day", 11

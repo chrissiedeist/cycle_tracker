@@ -1,188 +1,187 @@
 require 'rails_helper'
 
 RSpec.describe TemperatureService do
-  subject { TemperatureService.new(days, peak_day).compute }
   let(:days) do
     temps.map do |day_num, temp|
       double(:day, :number => day_num, :temp => temp)
     end
   end
+  subject { TemperatureService.new(peak_day, days) }
 
-  context "no peak" do
-    let(:peak_day) { nil }
-    let(:temps) do
-      [ [1, 98],
-        [2, 97.9],
-        [3, 98],
-        [4, 98],
-        [5, 97.5],
-        [6, 97.8],
-        [7, 97.1],
-      ]
-    end
-
-    it "returns nil for ltl" do
-      expect(subject.ltl).to eq(nil)
-    end
-
-    it "returns nil for htl" do
-      expect(subject.htl).to eq(nil)
-    end
-
-    it "returns nil for last_of_pre_shift_6_num" do
-      expect(subject.last_of_pre_shift_6_num).to eq(nil)
+  shared_examples "thermal_shift_start_day_number" do |shift_start_day_number|
+    it "returns the correct value" do
+      expect(subject.thermal_shift_start_day_number).to eq(shift_start_day_number)
     end
   end
 
-  context "three or more days past peak" do
-    context "shift is present" do
-      let(:peak_day) { 18 }
-      let(:temps) do
-        [ [1, 98],
-          [2, 97.9],
-          [3, 98],
-          [4, 98],
-          [5, 97.5],
-          [6, 97.8],
-          [7, 97.1],
-          [8, 97.3],
-          [9, 97.6],
-          [10, 97.5],
-          [11, 97.5],
-          [12, 97.3],
-          [13, 97.3],
-          [14, 97.5],
-          [15, 97.5],
-          [16, 97.6],
-          [17, 97.3],
-          [18, 97.3],
-          [19, 97.3],
-          [20, 97.6],
-          [21, 97.8],
-          [22, 97.8],
-          [23, 97.7],
-          [24, 97.9],
-          [25, 98.1],
-        ]
-      end
-
-      it "finds the ltl" do
-        expect(subject.ltl).to eq(97.6)
-      end
-
-      it "finds the htl" do
-        expect(subject.htl).to eq(98.0)
-      end
-
-      it "calculates last_of_pre_shift_6_num" do
-        expect(subject.last_of_pre_shift_6_num).to eq(20)
-      end
+  shared_examples "ltl" do |expected_ltl|
+    it "returns the correct value" do
+      expect(subject.ltl).to eq(expected_ltl)
     end
+  end
 
-    context "shift is not present" do
-      let(:peak_day) { 19 }
+  context "no peak" do
+    let(:peak_day) { nil }
+    let(:temps) { [] }
+
+    include_examples "thermal_shift_start_day_number", nil
+    include_examples "ltl", nil
+  end
+
+  context "only 5 temps before shift" do
+    let(:temps) do
+      [
+        [1, 97],
+        [2, 97],
+        [3, 97],
+        [4, 98],
+        [5, 98],
+        [6, 99],
+        [7, 99],
+        [8, 99],
+      ]
+    end
+    let(:peak_day) { 5 }
+
+    include_examples "thermal_shift_start_day_number", nil
+    include_examples "ltl", nil
+
+    context "6 temps before shift but one is nil" do
       let(:temps) do
-        [ [1, 98],
+        [
+          [1, 97],
           [2, 97],
-          [3, 98],
+          [3, nil],
           [4, 98],
-          [5, 97],
-          [6, 97],
-          [7, 97],
-          [8, 97],
-          [9, 97],
-          [10, 97],
-          [11, 97],
-          [12, 97],
-          [13, 97],
-          [14, 97],
-          [15, 97],
-          [16, 97],
-          [17, 97],
-          [18, 97],
-          [19, 97],
-          [20, 97],
-          [21, 97.8],
-          [22, 97.8],
+          [5, 98],
+          [6, 98],
+          [7, 99],
+          [8, 99],
+          [8, 99],
         ]
       end
+      let(:peak_day) { 5 }
 
-      it "returns nil for ltl" do
-        expect(subject.ltl).to eq(nil)
-      end
+      include_examples "thermal_shift_start_day_number", nil
+      include_examples "ltl", nil
+    end
+  end
 
-      it "returns nil for htl" do
-        expect(subject.htl).to eq(nil)
-      end
+  context "only 2 high temps" do
+    let(:temps) do
+      [
+        [1, 97],
+        [2, 97],
+        [3, 97],
+        [4, 98],
+        [5, 98],
+        [6, 98],
+        [7, 99],
+        [8, 99],
+      ]
+    end
+    let(:peak_day) { 5 }
 
-      it "returns nil for last_of_pre_shift_6_num" do
-        expect(subject.last_of_pre_shift_6_num).to eq(nil)
+    include_examples "thermal_shift_start_day_number", nil
+    include_examples "ltl", nil
+
+    context "three temps above shift but one is nil" do
+      let(:temps) do
+        [
+          [1, 97],
+          [2, 97],
+          [3, 97],
+          [4, 98],
+          [5, 98],
+          [6, 98],
+          [7, 99],
+          [8, nil],
+          [9, 99],
+        ]
       end
+      let(:peak_day) { 5 }
+
+      include_examples "thermal_shift_start_day_number", nil
+      include_examples "ltl", nil
+    end
+  end
+
+  context "sufficient temps on either side of peak" do
+    let(:temps) do
+      [
+        [1, 97],
+        [2, 97],
+        [3, 97],
+        [4, 96],
+        [5, 94],
+        [6, 97],
+        [7, 98],
+        [8, 98],
+        [9, 98],
+        [10, 97],
+        [11, 97],
+        [12, 97],
+      ]
     end
 
-    context "peak is during preshift" do
+    context "a shift occurs 3 days before peak" do
+      let(:peak_day) { 10 }
+
+      include_examples "thermal_shift_start_day_number", 7
+      include_examples "ltl", 97
+      include_examples "ltl", 97
+    end
+
+    context "a shift occurs 4 days before peak" do
       let(:peak_day) { 11 }
-      let(:temps) do
-        [ [1, nil],
-          [2, nil],
-          [3, nil],
-          [4, nil],
-          [5, nil],
-          [6, 97.8],
-          [7, 97.8],
-          [8, 97.3],
-          [9, 97.6],
-          [10, 97.5],
-          [11, 97.8],
-          [12, 97.7],
-          [13, 98],
-          [14, 98.2],
-          [15, 98],
-          [16, 98.3],
-        ]
-      end
 
-      it "finds the ltl" do
-        expect(subject.ltl).to eq(97.8)
-      end
-
-      it "calculates last_of_pre_shift_6_num" do
-        expect(subject.last_of_pre_shift_6_num).to eq(12)
-      end
-
-      it "calculates last_of_pre_shift_6_num" do
-        expect(subject.shift_start_day_num).to eq(13)
-      end
+      include_examples "thermal_shift_start_day_number", nil
+      include_examples "ltl", nil
     end
 
-    context "nils around peak" do
-      let(:peak_day) { 7 }
-      let(:temps) do
-        [ [1, nil],
-          [2, nil],
-          [3, nil],
-          [4, nil],
-          [5, nil],
-          [6, nil],
-          [7, 97.8],
-          [8, 97.3],
-          [9, 97.6],
-          [10, 97.5],
-          [11, 97.8],
-          [12, 97.7],
-          [13, 98],
-          [14, 98.2],
-          [15, 98],
-          [16, 98.3],
-        ]
+    context "nils around the peak" do
+      context "without enough additional data" do
+        let(:temps) do
+          [
+            [1, 97],
+            [2, 97],
+            [3, 97],
+            [4, 96],
+            [5, 94],
+            [6, 97],
+            [7, 98],
+            [8, nil],
+            [9, 98],
+            [10, 97],
+          ]
+        end
+        let(:peak_day) { 10 }
+
+        include_examples "thermal_shift_start_day_number", nil
+        include_examples "ltl", nil
       end
 
-      it "finds the ltl" do
-        expect(subject.ltl).to eq(nil)
-      end
+      context "with enough additional data" do
+        let(:temps) do
+          [
+            [1, 97],
+            [2, 97],
+            [3, 97],
+            [4, 96],
+            [5, 94],
+            [6, 97],
+            [7, 98],
+            [8, nil],
+            [9, 98],
+            [10, 98],
+            [11, 97],
+            [12, 97],
+          ]
+        end
+        let(:peak_day) { 10 }
 
-      it "calculates last_of_pre_shift_6_num" do
-        expect(subject.last_of_pre_shift_6_num).to eq(nil)
+        include_examples "thermal_shift_start_day_number", nil
+        include_examples "ltl", nil
       end
     end
   end
