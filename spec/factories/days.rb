@@ -4,7 +4,6 @@ FactoryGirl.define do
       score 1
     end
 
-    bleeding Day::Bleeding::None
     sensation do
       case score
       when 1

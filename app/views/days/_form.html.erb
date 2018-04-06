@@ -22,7 +22,7 @@
 
   <div class="field">
     <%= f.label :bleeding %><br>
-    <%= f.select(:bleeding, options_for_select([["None", Day::Bleeding::None], ["Light", Day::Bleeding::Light], ["Heavy", Day::Bleeding::Heavy], @day.bleeding || Day::Bleeding::None])) %>
+    <%= f.select(:bleeding, options_for_select([["None", nil], ["Light", Day::Bleeding::Light], ["Heavy", Day::Bleeding::Heavy], @day.bleeding ])) %>
   </div>
   <div class="field">
     <%= f.label :sensation %><br>
@@ -34,21 +34,24 @@
   </div>
   <div class="field">
     <%= f.label :cervix %><br>
-    <%= f.select(:cervix, options_for_select([["Soft", Day::Cervix::Soft], ["Hard", Day::Cervix::Hard], ["Not observed", Day::Cervix::NotObserved]], @day.cervix)) %>
+    <%= f.select(:cervix, options_for_select([["Not observed", nil], ["Soft", Day::Cervix::Soft], ["Hard", Day::Cervix::Hard]], @day.cervix)) %>
   </div>
   <div class="field">
     <%= f.label :temp %><br>
-    <%= f.select(:temp, options_for_select(Day::Temperatures::NormalRange, @day.temp)) %>
+    <%= f.select(:temp, options_for_select([["Not observed", nil]] + Day::Temperatures::NormalRange.to_a, @day.temp)) %>
   </div>
+
+</br>
+<h3>Other characteristics:</h3>
 
   <div class="field">
     <%= f.label :weight %><br>
-    <%= f.select(:weight, options_for_select(Day::Weight::NormalRange, @day.weight)) %>
+    <%= f.select(:weight, options_for_select([["Not observed", nil]] + Day::Weight::NormalRange.to_a, @day.weight)) %>
   </div>
 
   <div class="field">
     <%= f.label :cramps %><br>
-    <%= f.select(:cramps, options_for_select([Day::Cramps::Yes, Day::Cramps::No], @day.cramps)) %>
+    <%= f.select(:cramps, options_for_select([Day::Cramps::No, Day::Cramps::Yes], @day.cramps)) %>
   </div>
 
   <div class="field">
