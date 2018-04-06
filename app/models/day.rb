@@ -4,6 +4,27 @@ class Day < ActiveRecord::Base
     NormalRange = (96..100).step(0.1)
   end
 
+  module Weight
+    NormalRange = (130..150).step(1)
+  end
+
+  module Drinks
+    NormalRange = (0..6).step(0.5)
+  end
+
+  module HoursBadSleep
+    NormalRange = (0..8).step(0.5)
+  end
+
+  module Mood
+    NormalRange = (0..6).step(0.5)
+  end
+
+  module Cramps
+    Yes = 1
+    No = 0
+  end
+
   module Characteristics
     Slippery = "s"
     Tacky = "t"

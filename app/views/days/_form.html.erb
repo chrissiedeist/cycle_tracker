@@ -40,6 +40,36 @@
     <%= f.label :temp %><br>
     <%= f.select(:temp, options_for_select(Day::Temperatures::NormalRange, @day.temp)) %>
   </div>
+
+  <div class="field">
+    <%= f.label :weight %><br>
+    <%= f.select(:weight, options_for_select(Day::Weight::NormalRange, @day.weight)) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :cramps %><br>
+    <%= f.select(:cramps, options_for_select([Day::Cramps::Yes, Day::Cramps::No], @day.cramps)) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :irritability %><br>
+    <%= f.select(:irritability, options_for_select(Day::Mood::NormalRange, @day.irritability)) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :sensitivity %><br>
+    <%= f.select(:sensitivity, options_for_select(Day::Mood::NormalRange, @day.sensitivity)) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :drinks %><br>
+    <%= f.select(:drinks, options_for_select(Day::Drinks::NormalRange, @day.drinks)) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :hours_bad_sleep %><br>
+    <%= f.select(:hours_sleep, options_for_select(Day::HoursBadSleep::NormalRange, @day.hours_sleep)) %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

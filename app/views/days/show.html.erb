@@ -33,5 +33,35 @@
   <%= @day.temp %>
 </p>
 
+</br>
+<h3>Other characteristics:</h3>
+
+<p>
+  <strong>Weight:</strong>
+  <%= @day.weight %>
+</p>
+
+<p> <strong>Cramps:</strong>
+  <%= @day.cramps %>
+</p>
+
+<p>
+  <strong>Irritability:</strong>
+  <%= @day.irritability %>
+</p>
+<p>
+  <strong>Sensitivity:</strong>
+  <%= @day.sensitivity %>
+</p>
+
+<p>
+  <strong>Drinks:</strong>
+  <%= @day.drinks %>
+</p>
+
+<p>
+  <strong>Hours of bad sleep:</strong>
+  <%= @day.hours_sleep %>
+</p>
 <%= link_to 'Edit', edit_cycle_day_path(@cycle, @day) %> |
 <%= link_to 'Back', cycle_days_path(@cycle) %>
