@@ -158,44 +158,4 @@ RSpec.describe Day, type: :model do
       end
     end
   end
-
-  describe "phase" do
-    let(:cycle) { instance_double("Cycle", :phase_3_start => phase_3_start, :peak_day => 15) }
-    before { allow(day).to receive(:cycle).and_return(cycle) }
-
-    context "bleeding" do
-      let(:phase_3_start) { nil }
-      let(:day) { FactoryGirl.create(:bleeding_day) }
-      it "is less-fertile" do
-        expect(day.phase).to eq("less-fertile")
-      end
-    end
-
-    context "peak day" do
-      let(:phase_3_start) { 20 }
-      let(:day) { FactoryGirl.create(:day, :number => 15) }
-
-      it "is peak-day" do
-        expect(day.phase).to eq("peak-day")
-      end
-    end
-
-    context "phase 3" do
-      let(:phase_3_start) { 20 }
-      let(:day) { FactoryGirl.create(:day, :number => 20) }
-
-      it "is less-fertile" do
-        expect(day.phase).to eq("less-fertile")
-      end
-    end
-
-    context "medium-fertile" do
-      let(:phase_3_start) { nil }
-      let(:day) { FactoryGirl.create(:day, :number => 8) }
-
-      it "is medium-fertile" do
-        expect(day.phase).to eq("medium-fertile")
-      end
-    end
-  end
 end

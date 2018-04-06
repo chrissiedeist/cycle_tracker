@@ -7,9 +7,9 @@
 </div>
 
 <div class="data">
-  <h3>Peak day:<%= @cycle.peak_day %></h3>
-  <h3>LTL:<%= @cycle.ltl %>, HTL:<%= @cycle.htl %></h3>
-  <h3>Last day of pre 6: <%= @cycle.last_day_of_pre_shift_6 %> </h3>
+  <h3>Peak day:<%= @cycle_presenter.peak_day %></h3>
+  <h3>LTL:<%= @cycle_presenter.ltl %>, HTL:<%= @cycle_presenter.htl %></h3>
+  <h3>Last day of pre 6: <%= @cycle_presenter.last_of_pre_shift_6_num %> </h3>
 
 <table>
   <thead>
@@ -26,7 +26,7 @@
   </thead>
   <tbody>
     <% @days.each do |day| %>
-      <tr class="<%= day.phase %>">
+      <tr class="<%= @cycle_presenter.phase_at(day.number) %>">
         <td><%= day.date %></td>
         <td><%= day.number %></td>
         <td><%= day.bleeding %></td>
@@ -36,6 +36,7 @@
         <td><%= day.temp %></td>
         <td><%= link_to 'Show', cycle_day_path(@cycle, day) %></td>
         <td><%= link_to 'Edit', edit_cycle_day_path(@cycle, day) %></td>
+        <td><%= link_to 'Destroy', [@cycle, day], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
 
     <% end %>

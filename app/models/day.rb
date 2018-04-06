@@ -105,16 +105,4 @@ class Day < ActiveRecord::Base
   def previous_day
     Day.where(:cycle => self.cycle, :number => self.number - 1).first
   end
-
-  def phase
-    if number < 7
-      "less-fertile"
-    elsif number == cycle.peak_day
-      "peak-day"
-    elsif cycle.phase_3_start && number >= cycle.phase_3_start
-      "less-fertile"
-    else
-      "medium-fertile"
-    end
-  end
 end

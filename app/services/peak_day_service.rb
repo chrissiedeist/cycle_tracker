@@ -1,15 +1,11 @@
 class PeakDayService
-  def self.find(days)
-    new(days).find
-  end
-
   def initialize(days)
     self.days = days
   end
 
   attr_accessor :days
 
-  def find
+  def peak_day
     candidates = []
     days.each do |day|
       candidates << day if _is_local_peak?(day)

@@ -2,75 +2,10 @@ class Cycle < ActiveRecord::Base
   has_many :days, -> { order(number: :asc) }
   belongs_to :user
 
-  def phase_3_start
-    @phase_3_start ||= _phase_3_start
-  end
+  def populated_days
+    last_populated_day = days.select(&:has_data?).last
 
-  def _phase_3_start
-    return nil unless _three_days_past_peak?
-
-    return nil unless last_day_of_pre_shift_6
-
-    third_day_after_shift = last_day_of_pre_shift_6 + 3
-
-    if _third_temp_greater_than_htl(third_day_after_shift, htl) ||
-      _cervix_hard_and_closed_three_days?(third_day_after_shift)
-
-      third_day_after_shift
-    else
-      third_day_after_shift + 1
-    end
-  end
-
-  def _third_post_peak_day_after_shift
-    if last_day_of_pre_shift_6 > peak_day
-      last_day_of_pre_shift_6 + 3
-    else
-      peak_day + 3
-    end
-  end
-
-  def peak_day
-    PeakDayService.find(days)
-  end
-
-  def last_day_of_pre_shift_6
-    temperature_service.last_day_of_pre_shift_6
-  end
-
-  def htl
-    temperature_service.htl
-  end
-
-  def ltl
-    temperature_service.ltl
-  end
-
-  def temperature_service
-    TemperatureService.new(days, peak_day)
-  end
-
-  def _three_days_past_peak?
-    return nil unless peak_day.present?
-
-    _populated_days.count >= peak_day + 3
-  end
-
-  def _populated_days
-    days.select(&:has_data?)
-  end
-
-  def _third_temp_greater_than_htl(day_num, htl)
-    day = days.where(number: day_num).take
-    temp = day.try(:temp)
-    temp && temp > htl
-  end
-
-  def _cervix_hard_and_closed_three_days?(third_day_after_shift)
-    [0, 1, 2].all? do |days_ago|
-      day = cycle_day(third_day_after_shift - days_ago)
-      day.cervix == Day::Cervix::Hard
-    end
+    days.select {|day| day.number <= last_populated_day.number }
   end
 
   def cycle_day(num)

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe TemperatureService do
-  subject { TemperatureService.new(days, peak_day) }
+  subject { TemperatureService.new(days, peak_day).compute }
   let(:days) do
     temps.map do |day_num, temp|
       double(:day, :number => day_num, :temp => temp)
@@ -29,8 +29,8 @@ RSpec.describe TemperatureService do
       expect(subject.htl).to eq(nil)
     end
 
-    it "returns nil for last_day_of_pre_shift_6" do
-      expect(subject.last_day_of_pre_shift_6).to eq(nil)
+    it "returns nil for last_of_pre_shift_6_num" do
+      expect(subject.last_of_pre_shift_6_num).to eq(nil)
     end
   end
 
@@ -74,8 +74,8 @@ RSpec.describe TemperatureService do
         expect(subject.htl).to eq(98.0)
       end
 
-      it "calculates last_day_of_pre_shift_6" do
-        expect(subject.last_day_of_pre_shift_6).to eq(20)
+      it "calculates last_of_pre_shift_6_num" do
+        expect(subject.last_of_pre_shift_6_num).to eq(20)
       end
     end
 
@@ -115,8 +115,8 @@ RSpec.describe TemperatureService do
         expect(subject.htl).to eq(nil)
       end
 
-      it "returns nil for last_day_of_pre_shift_6" do
-        expect(subject.last_day_of_pre_shift_6).to eq(nil)
+      it "returns nil for last_of_pre_shift_6_num" do
+        expect(subject.last_of_pre_shift_6_num).to eq(nil)
       end
     end
 
@@ -146,8 +146,12 @@ RSpec.describe TemperatureService do
         expect(subject.ltl).to eq(97.8)
       end
 
-      it "calculates last_day_of_pre_shift_6" do
-        expect(subject.last_day_of_pre_shift_6).to eq(12)
+      it "calculates last_of_pre_shift_6_num" do
+        expect(subject.last_of_pre_shift_6_num).to eq(12)
+      end
+
+      it "calculates last_of_pre_shift_6_num" do
+        expect(subject.shift_start_day_num).to eq(13)
       end
     end
 
@@ -174,11 +178,11 @@ RSpec.describe TemperatureService do
       end
 
       it "finds the ltl" do
-        expect(subject.ltl).to eq(97.8)
+        expect(subject.ltl).to eq(nil)
       end
 
-      it "calculates last_day_of_pre_shift_6" do
-        expect(subject.last_day_of_pre_shift_6).to eq(12)
+      it "calculates last_of_pre_shift_6_num" do
+        expect(subject.last_of_pre_shift_6_num).to eq(nil)
       end
     end
   end

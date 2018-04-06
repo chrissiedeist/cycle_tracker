@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PeakDayService do
-  subject { PeakDayService.find(days) }
+  subject { PeakDayService.new(days) }
 
   context "no peak yet" do
     let(:days) do
@@ -20,7 +20,7 @@ RSpec.describe PeakDayService do
     end
 
     it "finds the peak day" do
-      expect(subject).to eq(nil)
+      expect(subject.peak_day).to eq(nil)
     end
   end
 
@@ -41,7 +41,7 @@ RSpec.describe PeakDayService do
     end
 
     it "finds the peak day" do
-      expect(subject).to eq(9)
+      expect(subject.peak_day).to eq(9)
     end
   end
 
@@ -66,7 +66,11 @@ RSpec.describe PeakDayService do
     end
 
     it "finds the peak day" do
-      expect(subject).to eq(13)
+      expect(subject.peak_day).to eq(13)
+    end
+
+    it "finds the third day after the peak" do
+
     end
   end
 end
