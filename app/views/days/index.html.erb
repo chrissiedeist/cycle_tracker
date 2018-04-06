@@ -1,5 +1,5 @@
 <h1>Listing Days</h1>
-<%= line_chart @days.map {|day| [day.number, day.temp] } %>
+<%= temperatures_by_day %>
 <table>
   <thead>
       <tr><td>PEAK DAY:<%= @cycle.peak_day %></td></td>
