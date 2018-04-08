@@ -29,14 +29,12 @@ class Day < ActiveRecord::Base
     Slippery = "s"
     Tacky = "t"
     None = "n"
-    NotObserved = "no"
   end
 
   module Sensations
     Wet = "w"
     Moist = "m"
     Dry = "d"
-    NotObserved = "no"
   end
 
   module Cervix
@@ -53,7 +51,7 @@ class Day < ActiveRecord::Base
 
   validates :characteristics, inclusion: { in: [ Characteristics::Slippery, Characteristics::Tacky, Characteristics::None, nil] }
   validates :sensation, inclusion: { in: [ Sensations::Wet, Sensations::Moist, Sensations::Dry, nil] }
-  validates :cervix, inclusion: { in: [ Cervix::Soft, Cervix::Hard, nil ] }
+  validates :cervix, inclusion: { in: [ Cervix::NotObserved, Cervix::Soft, Cervix::Hard, nil ] }
   validates :bleeding, inclusion: { in: [Bleeding::None, Bleeding::Light, Bleeding::Heavy, nil] }
   validates :number, uniqueness: { scope: :cycle }
   validates :date, uniqueness: { scope: :cycle }
