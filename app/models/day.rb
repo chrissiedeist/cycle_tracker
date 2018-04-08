@@ -89,18 +89,10 @@ class Day < ActiveRecord::Base
    [
       CHARACTERISTICS_FERTILITY_SCORE[characteristics],
       SENSATIONS_FERTILITY_SCORE[sensation]
-   ].max
+   ].compact.max
   end
 
   def has_data?
     bleeding? || sensation || characteristics || temp
-  end
-
-  def next_day
-    Day.where(:cycle => self.cycle, :number => self.number + 1).first
-  end
-
-  def previous_day
-    Day.where(:cycle => self.cycle, :number => self.number - 1).first
   end
 end
