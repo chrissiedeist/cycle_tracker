@@ -34,7 +34,7 @@
   </div>
   <div class="field">
     <%= f.label :cervix %><br>
-    <%= f.select(:cervix, options_for_select([["Not observed", nil], ["Soft", Day::Cervix::Soft], ["Hard", Day::Cervix::Hard]], @day.cervix)) %>
+    <%= f.select(:cervix, options_for_select([["Not observed", Day::Cervix::NotObserved], ["Soft", Day::Cervix::Soft], ["Hard", Day::Cervix::Hard]], @day.cervix)) %>
   </div>
   <div class="field">
     <%= f.label :temp %><br>
