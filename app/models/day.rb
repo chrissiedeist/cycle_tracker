@@ -9,7 +9,7 @@ class Day < ActiveRecord::Base
   end
 
   module Drinks
-    NormalRange = (0..6).step(0.5)
+    NormalRange = (0..6).step(1)
   end
 
   module HoursBadSleep
@@ -17,7 +17,7 @@ class Day < ActiveRecord::Base
   end
 
   module Mood
-    NormalRange = (0..6).step(0.5)
+    NormalRange = (0..3).step(1)
   end
 
   module Cramps
