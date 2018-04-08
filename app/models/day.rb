@@ -13,7 +13,7 @@ class Day < ActiveRecord::Base
   end
 
   module HoursBadSleep
-    NormalRange = (0..8).step(0.5)
+    NormalRange = (0..8).step(1)
   end
 
   module Mood
