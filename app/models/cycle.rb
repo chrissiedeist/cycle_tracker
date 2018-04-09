@@ -31,6 +31,7 @@ class Cycle < ActiveRecord::Base
 
   def populated_days
     last_populated_day = days.select(&:has_data?).last
+    return [] unless  last_populated_day.present?
 
     days.select {|day| day.number <= last_populated_day.number }
   end
