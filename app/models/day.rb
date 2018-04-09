@@ -17,7 +17,7 @@ class Day < ActiveRecord::Base
   end
 
   module Mood
-    NormalRange = (0..3).step(1)
+    NormalRange = (-2..3).step(1)
   end
 
   module Cramps
