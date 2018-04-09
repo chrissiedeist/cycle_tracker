@@ -14,7 +14,9 @@ Maybe later
 
 Todo
 - figure out how to add new day without breaking things
-- [ ] default temp to prev day's temp
-- [ ] ensure a day belongs to a cycle
+- [ ] add "clear" butto nfor day
+
+DONE
 - [ ] deploy to heroku
 - [ ] add authentication
+- [ ] export to  => 
