@@ -2,6 +2,33 @@ class Cycle < ActiveRecord::Base
   has_many :days, -> { order(number: :asc) }
   belongs_to :user
 
+  def to_csv
+    attributes = [
+      :bleeding,
+      :sensation,
+      :characteristics,
+      :cervix,
+      :temp,
+      :created_at,
+      :updated_at,
+      :date,
+      :number,
+      :cycle_id,
+      :weight,
+      :cramps,
+      :irritability,
+      :sensitivity,
+      :drinks,
+      :hours_sleep,
+    ]
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+      days.each do |day|
+        csv << attributes.map { |attr| day.send(attr) }
+      end
+    end
+  end
+
   def populated_days
     last_populated_day = days.select(&:has_data?).last
 

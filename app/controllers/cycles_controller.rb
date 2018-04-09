@@ -1,3 +1,4 @@
+require 'csv'
 class CyclesController < ApplicationController
   before_action :set_cycle, only: [:show, :edit, :update, :destroy]
   before_filter :require_authorization, only: [:show, :edit, :update, :destroy]
@@ -11,6 +12,10 @@ class CyclesController < ApplicationController
   # GET /cycles/1
   # GET /cycles/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.csv { send_data @cycle.to_csv, filename: "users-#{Date.today}.csv" }
+    end
   end
 
   # GET /cycles/new
