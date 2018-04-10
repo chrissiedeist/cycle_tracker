@@ -15,11 +15,6 @@ class DaysController < ApplicationController
     @cycle.days.find(params[:id])
   end
 
-  # GET /days/new
-  def new
-    @day = @cycle.days.new
-  end
-
   # GET /days/1/edit
   def edit
     @cycle.days.find(params[:id])

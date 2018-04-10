@@ -52,13 +52,6 @@ RSpec.describe DaysController, type: :controller do
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new day as @day" do
-      get :new, params: {}, session: valid_session
-      expect(assigns(:day)).to be_a_new(Day)
-    end
-  end
-
   describe "GET #edit" do
     it "assigns the requested day as @day" do
       day = Day.create! valid_attributes
