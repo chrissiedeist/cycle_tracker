@@ -53,7 +53,7 @@ class CyclePresenterService
       "less-fertile"
     elsif day_number == peak_day_number
       "peak-day"
-    elsif phase_3_start && number >= phase_3_start
+    elsif phase_3_start && day_number >= phase_3_start
       "less-fertile"
     else
       "medium-fertile"
