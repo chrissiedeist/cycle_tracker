@@ -55,6 +55,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :tenderness %><br>
+    <%= f.select(:tenderness, options_for_select([0,1,2], @day.tenderness || 0)) %>
+  </div>
+
+  <div class="field">
     <%= f.label :irritability %><br>
     <%= f.select(:irritability, options_for_select(Day::Mood::NormalRange, @day.irritability || 0)) %>
   </div>

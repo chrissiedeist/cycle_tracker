@@ -21,7 +21,7 @@ module GraphHelper
   end
 
   def other_chars_by_day
-    chart_data = [:irritability, :sensitivity, :drinks, :hours_sleep].map do |characteristic|
+    chart_data = [:irritability, :sensitivity, :tenderness, :drinks, :hours_sleep].map do |characteristic|
       data = @days.map {|day| [day.number, day.send(characteristic)] }
       {
         name: characteristic.to_s,
@@ -45,16 +45,14 @@ module GraphHelper
   end
 
   def weight_by_day
-    # chart_data = [:irritability, :sensitivity, :drinks, :hours_sleep].map do |characteristic|
-      characteristic = :weight
-      data = @days.map {|day| [day.number, day.send(characteristic)] }
-      chart_data = [
-        {
+    characteristic = :weight
+    data = @days.map {|day| [day.number, day.send(characteristic)] }
+    chart_data = [
+      {
         name: characteristic.to_s,
         data: data,
       },
-      ]
-    # end
+    ]
     line_chart chart_data,
     library: {
       title: "Weight",

@@ -18,6 +18,7 @@ class Cycle < ActiveRecord::Base
       :cramps,
       :irritability,
       :sensitivity,
+      :tenderness,
       :drinks,
       :hours_sleep,
     ]

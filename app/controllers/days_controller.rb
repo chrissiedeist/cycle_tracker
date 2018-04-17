@@ -73,6 +73,6 @@ class DaysController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def day_params
-      params.require(:day).permit(:bleeding, :sensation, :characteristics, :cervix, :temp, :number, :date, :weight, :cramps, :irritability, :sensitivity, :drinks, :hours_sleep)
+      params.require(:day).permit(:bleeding, :sensation, :characteristics, :cervix, :temp, :number, :date, :weight, :cramps, :irritability, :sensitivity, :drinks, :hours_sleep, :tenderness)
     end
 end
